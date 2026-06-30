@@ -47,38 +47,53 @@ Claude Desktop, Cursor, …) can call every endpoint as a tool.
   (issues.md 49KB, agents.md 32KB — these have request/response detail + examples).
 - Shorter in-repo copy: `paperclip/docs/api/*.md`.
 
-## Design decisions
-- **Spec source at runtime**: fetch live `/api/openapi.json` from target instance first;
-  fall back to bundled snapshot (`spec/openapi.json`) if unreachable. Override via env.
-- **Tool per operation**: name from `operationId` (sanitized) or `method_path`.
-  Input schema = path params + query params + requestBody merged into one object.
-- **Tool-count control**: env filters `PAPERCLIP_MCP_TAGS`, `PAPERCLIP_MCP_INCLUDE`,
-  `PAPERCLIP_MCP_EXCLUDE`. Default = expose all (honors "all available endpoints").
-- **Always-on helper tools**: `paperclip_request` (raw escape hatch),
-  `paperclip_list_endpoints`, `paperclip_describe_endpoint` (discovery).
-- **Transports**: stdio (primary/bin) + optional Streamable HTTP (`--http` / env).
-- **Config (env)**: `PAPERCLIP_API_BASE_URL`, `PAPERCLIP_API_KEY`, `PAPERCLIP_RUN_ID`,
-  `PAPERCLIP_OPENAPI_URL`, filter vars, `PAPERCLIP_MCP_TRANSPORT`/`PORT`.
+## Design decisions (final)
+- **Spec source at runtime**: fetch live `/api/openapi.json` first; fall back to bundled
+  `spec/openapi.json`. Modes via `PAPERCLIP_OPENAPI_SOURCE=auto|live|bundled`.
+- **Spec facts confirmed**: 345 paths / **423 operations** / ~30 tags. No operationIds →
+  derive deterministic tool names from `method_path` (≤64 chars, hash-disambiguated, all unique).
+  Request bodies are inline JSON Schema (no $refs in inputs) → fed straight to tool `inputSchema`.
+  Params declared in `parameters` (path/query). `x-paperclip-authorization.actor` (board/
+  board_or_agent/public) + `instanceAdmin` → used for risk/elevated metadata.
+- **Gateway mode is the DEFAULT** (per user feedback — production tool-surface management):
+  expose only meta-tools `paperclip_search_tools` / `paperclip_inspect_tool` /
+  `paperclip_call_tool` (+ optional `paperclip_request`). Progressive tool discovery: the model
+  never loads ~420 schemas at once. `direct` mode = all (filtered) endpoint tools; `hybrid` =
+  allowlisted only. `PAPERCLIP_MCP_MODE`.
+- **search_tools surfaces ALL tags**: the `tag` param has an `enum` of every schema tag, and the
+  response includes an `availableTags` directory with counts (per user request).
+- **Risk model**: GET=read, POST/PUT/PATCH=write, DELETE=destructive. `call_tool` refuses
+  destructive ops without `confirm:true` (`PAPERCLIP_MCP_CONFIRM_DESTRUCTIVE`). Result text
+  truncated at `PAPERCLIP_MCP_MAX_RESULT_CHARS` (50k).
+- **Transports**: stdio (bin) + Streamable HTTP (stateless, `/mcp` + `/health`).
+- **SDK**: `@modelcontextprotocol/sdk` 1.29.0, low-level `Server` (sanctioned for advanced use).
+- **Reusable upkeep**: `npm run sync` (gen snapshot+index → check coverage → build → test);
+  `scripts/doc-enrichment.workflow.js` + `scripts/merge-enrichment.mjs` for descriptions. See RUNBOOK.md.
 
-## Checklist
+## Checklist (DONE)
 
-- [ ] `pnpm install` in paperclip/ (background) — needed for spec gen
-- [ ] Generate `spec/openapi.json` snapshot via buildOpenApiDocument()
-- [ ] Scaffold package: package.json, tsconfig.json, .gitignore, src/ layout
-- [ ] Config loader (env)
-- [ ] HTTP client (Bearer auth, run-id, JSON, error normalization)
-- [ ] OpenAPI loader (live fetch + bundled fallback)
-- [ ] Schema converter (OpenAPI params/body → JSON Schema tool input)
-- [ ] Tool registrar (one tool per operation) + filtering
-- [ ] Discovery + escape-hatch tools
-- [ ] stdio transport + bin entry
-- [ ] Streamable HTTP transport (optional)
-- [ ] Workflow: enrich tool descriptions from 18 reference docs + coverage verify
-- [ ] Vitest tests (schema conversion, registration, coverage)
-- [ ] typecheck + build + stdio smoke test (list tools)
-- [ ] README
+- [x] `pnpm install` in paperclip/ — done (for spec gen)
+- [x] Generate `spec/openapi.json` snapshot via buildOpenApiDocument() (+ operations-index.json)
+- [x] Scaffold package: package.json, tsconfig.json, .gitignore, src/ layout
+- [x] Config loader (env + CLI flags, modes)
+- [x] HTTP client (Bearer auth, run-id, JSON, error normalization, timeout)
+- [x] OpenAPI loader (live fetch + bundled fallback) + enrichment loader
+- [x] Schema converter (OpenAPI params/body → JSON Schema tool input + arg routing)
+- [x] Tool registrar (one tool per operation) + tag/regex filtering + risk metadata
+- [x] Gateway meta-tools (search/inspect/call) + raw escape hatch
+- [x] stdio transport + bin entry
+- [x] Streamable HTTP transport (smoke-tested: /health + initialize)
+- [x] Workflow: enriched 239/423 ops from 16 reference docs (0 invalid keys)
+- [x] Vitest tests: 25 passing (unit: tools/registry; integration: stdio gateway+direct)
+- [x] typecheck + build + coverage guard (423/423 unique) + stdio/http smoke
+- [x] README, RUNBOOK, .env.example, reusable sync/gen/coverage/merge scripts
 
-## Open questions / risks
-- ~340 tools may exceed some MCP clients' practical limits → mitigated by filters + helper tools.
-- Spec `operationId`s: confirm they exist/are unique; else derive deterministic names from method+path.
-- Some endpoints may be multipart (asset/file uploads) — handle or document as raw-request-only.
+## Status: COMPLETE
+All 423 endpoints reachable. Gateway default keeps context lean; direct/hybrid available.
+Live transport auto-syncs; `npm run sync` refreshes the offline snapshot when the API changes.
+
+## Possible follow-ups (not blocking)
+- Embedding/router-model ranking in registry.ts (currently keyword + tag scoring).
+- Per-endpoint examples in enrichment (only description/usage today).
+- Multipart endpoints (asset/file upload) work via raw `body` but aren't typed as file inputs.
+- Dev deps flagged npm-audit vulns (vite/esbuild transitive) — dev-only; review before publish.

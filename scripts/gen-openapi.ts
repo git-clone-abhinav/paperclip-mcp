@@ -40,10 +40,33 @@ async function main() {
     }
   }
 
-  const out = resolve(here, "../spec/openapi.json");
-  mkdirSync(dirname(out), { recursive: true });
+  const specDir = resolve(here, "../spec");
+  mkdirSync(specDir, { recursive: true });
+
+  const out = resolve(specDir, "openapi.json");
   writeFileSync(out, `${JSON.stringify(doc, null, 2)}\n`);
+
+  // Also emit a compact operations index (used by the doc-enrichment workflow and tooling).
+  const methods = ["get", "post", "put", "patch", "delete"];
+  const index: Array<Record<string, unknown>> = [];
+  for (const [path, item] of Object.entries(doc.paths ?? {})) {
+    for (const [method, op] of Object.entries(item as Record<string, any>)) {
+      if (!methods.includes(method)) continue;
+      index.push({
+        key: `${method.toUpperCase()} ${path}`,
+        method,
+        path,
+        summary: op?.summary ?? "",
+        tags: op?.tags ?? [],
+        actor: op?.["x-paperclip-authorization"]?.actor ?? null,
+      });
+    }
+  }
+  const indexOut = resolve(specDir, "operations-index.json");
+  writeFileSync(indexOut, `${JSON.stringify(index, null, 2)}\n`);
+
   console.log(`Wrote ${out}`);
+  console.log(`Wrote ${indexOut}`);
   console.log(`  openapi: ${doc.openapi}  title: ${doc.info?.title}  version: ${doc.info?.version}`);
   console.log(`  paths: ${pathCount}  operations: ${opCount}`);
 }

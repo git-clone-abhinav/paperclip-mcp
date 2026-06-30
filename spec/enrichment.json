@@ -1,0 +1,852 @@
+{
+  "DELETE /api/adapters/{type}": {
+    "description": "Removes an external adapter ({type}) from the instance registry. Built-in adapter types cannot be deleted (expect an error). Instance/board-scoped, not company-scoped."
+  },
+  "DELETE /api/agents/{id}": {
+    "description": "Hard-deletes an agent and cleans up related runtime state, runs, sessions, wakeups, and key material. Destructive — removes far more than the agent row.",
+    "usage": "Use terminate instead when you want to keep the agent's record."
+  },
+  "DELETE /api/agents/{id}/instructions-bundle/file": {
+    "description": "Deletes a file from the agent's instructions bundle. Requires manage access to the target agent's instructions."
+  },
+  "DELETE /api/agents/{id}/keys/{keyId}": {
+    "description": "Revokes an agent API key. Marks it revoked rather than hard-deleting."
+  },
+  "DELETE /api/attachments/{attachmentId}": {
+    "description": "Delete the attachment record and its stored object."
+  },
+  "DELETE /api/companies/{companyId}": {
+    "description": "Deletes a company and its related data. Destructive and should be treated as irreversible. Prefer POST /api/companies/{companyId}/archive when you may need to recover."
+  },
+  "DELETE /api/environments/{id}": {
+    "description": "Delete an execution environment. Scoped to the environment's company. May be blocked by active leases.",
+    "usage": "Check GET /api/environments/{id}/leases before deleting."
+  },
+  "DELETE /api/goals/{id}": {
+    "description": "Deletes a goal and returns the deleted row. Company-scoped.",
+    "usage": "Projects link goals via goalIds; deleting a goal may affect those links."
+  },
+  "DELETE /api/issues/{id}/approvals/{approvalId}": {
+    "description": "Unlink an approval from the issue. Same permissions as linking: board users with company access, or agents who are CEO or have canCreateAgents."
+  },
+  "DELETE /api/issues/{id}/documents/{key}": {
+    "description": "Delete a document and all of its revisions. Board-only. Returns 409 if the document is locked."
+  },
+  "DELETE /api/plugins/{pluginId}": {
+    "description": "Uninstall the plugin and remove its record. Instance-admin.",
+    "usage": "Disable the plugin first if its worker is running."
+  },
+  "DELETE /api/projects/{id}": {
+    "description": "Deletes a project and returns the deleted row. Company-scoped. Path accepts a UUID or unique shortname.",
+    "usage": "Deletes associated workspaces with the project."
+  },
+  "DELETE /api/projects/{id}/workspaces/{workspaceId}": {
+    "description": "Deletes a project workspace and returns the deleted row. If it was primary, Paperclip auto-promotes another workspace to primary. Company-scoped.",
+    "usage": "Path needs both project id and workspace id."
+  },
+  "DELETE /api/routine-triggers/{id}": {
+    "description": "Permanently delete a routine trigger. Agents may delete only triggers on their own routines.",
+    "usage": "Irreversible; to keep the trigger but disable it, PATCH enabled=false instead."
+  },
+  "DELETE /api/secrets/{id}": {
+    "description": "Hard-deletes the secret and cascades all version history. Runtime resolution will then fail for any config still referencing it. Board-only, company-scoped. Irreversible — only delete when nothing should resolve it.",
+    "usage": "Verify no agent/routine env still binds this secretId before deleting."
+  },
+  "GET /api/adapters": {
+    "description": "Lists the server-side adapter registry: built-in adapter types plus external adapters installed on the instance. Instance/board-scoped (not company-scoped) - describes the server itself. No params or body.",
+    "usage": "Read first to discover available {type} values (e.g. claude_local, codex_local, openclaw_gateway) for the other adapter routes."
+  },
+  "GET /api/adapters/{type}/config-schema": {
+    "description": "Returns the JSON schema the Adapter Manager uses to render the adapter {type} settings form. Instance/board-scoped.",
+    "usage": "Fetch before PATCH /api/adapters/{type} to know which config fields are valid."
+  },
+  "GET /api/adapters/{type}/ui-parser.js": {
+    "description": "Serves the adapter-supplied UI parser JavaScript bundle the Paperclip UI fetches to render run output for adapter {type}. Returns a JS script body, not JSON. Instance/board-scoped."
+  },
+  "GET /api/agents/me": {
+    "description": "Agent-only. Returns the current agent record, but only when the caller authenticates as an agent (agent API key or local agent JWT). Scoped to the agent's own company. Reads X-Paperclip-Run-Id header to attach the run context.",
+    "usage": "Canonical check that an agent token resolves correctly; 401/unauthenticated for board or missing tokens."
+  },
+  "GET /api/agents/me/inbox-lite": {
+    "description": "Compact assignment list for heartbeat startup: id, identifier, title, status, priority, project/goal/parent ids, activeRun, dependencyReady, and unresolved blocker counts. Agent-only.",
+    "usage": "Prefer at heartbeat start over the full company issues list; fall back to GET /api/companies/{companyId}/issues?assigneeAgentId=... only when you need complete issue objects."
+  },
+  "GET /api/agents/{id}": {
+    "description": "Gets one agent by UUID or company-unique shortname, plus derived `chainOfCommand` and `access` blocks. Shortname lookup needs company context via `?companyId=...` or agent auth, else 422. May return a redacted view for same-company peers the caller can't read."
+  },
+  "GET /api/agents/{id}/config-revisions": {
+    "description": "Lists prior config revisions for auditing. Same read-permission rules as configuration; secret-bearing fields are redacted."
+  },
+  "GET /api/agents/{id}/config-revisions/{revisionId}": {
+    "description": "Returns a single agent config revision. Secret-bearing fields are redacted."
+  },
+  "GET /api/agents/{id}/configuration": {
+    "description": "Returns the effective agent configuration. Board members need only company membership; agent actors need `agents:create`/canCreateAgents to read peers. Secret-bearing fields are redacted."
+  },
+  "GET /api/agents/{id}/instructions-bundle": {
+    "description": "Returns the agent's file-based instructions bundle. Caller must be allowed to read the target agent's instructions."
+  },
+  "GET /api/agents/{id}/instructions-bundle/file": {
+    "description": "Reads a single file from the agent's instructions bundle. Requires read access to the target agent's instructions."
+  },
+  "GET /api/agents/{id}/keys": {
+    "description": "Lists the agent's API keys (metadata only; the token is never returned after creation)."
+  },
+  "GET /api/agents/{id}/skills": {
+    "description": "Lists skills attached to the agent. Some adapters don't implement skill discovery and return a snapshot with warnings instead."
+  },
+  "GET /api/approvals/{id}": {
+    "description": "Get one approval: type, status, payload (sensitive values redacted), requestedByAgentId/requestedByUserId, decisionNote, decidedByUserId, decidedAt. Returns 404 if the approval does not exist or is outside your company."
+  },
+  "GET /api/approvals/{id}/comments": {
+    "description": "List the approval's review-thread comments in chronological order. Any caller with access to the approval's company can read them."
+  },
+  "GET /api/approvals/{id}/issues": {
+    "description": "List issues linked to an approval (e.g. tasks governed by a strategy approval). Linked issues must belong to the same company as the approval; a missing issue link yields 404, a cross-company link 422."
+  },
+  "GET /api/attachments/{attachmentId}/content": {
+    "description": "Stream attachment bytes: inline for renderable types (images, PDF, video), otherwise as a download; SVG gets a sandboxed CSP. Query download=1 forces a download. Supports HTTP Range (Accept-Ranges: bytes, 206 with Content-Range; 416 when unsatisfiable)."
+  },
+  "GET /api/cli-auth/challenges/{id}": {
+    "description": "Public. Polls a CLI auth challenge by id for its status. Once approved it returns the minted board API key (pcp_board_), shown only here at this point. Returns pending until approved or cancelled.",
+    "usage": "Poll repeatedly after POST /api/cli-auth/challenges until approved; the board key appears once, so capture it."
+  },
+  "GET /api/cli-auth/me": {
+    "description": "Board-only. Returns the resolved identity: user id, accessible company ids, instance-admin status, auth source, and key id (when a board key is used). Use to verify a board token. Not valid for agent tokens.",
+    "usage": "Quick check that a pcp_board_ bearer token or session resolves to a board actor."
+  },
+  "GET /api/companies": {
+    "description": "Lists the companies the board caller can access (normally just your own, not every company in the instance). Board-only route; agent callers do not use it. No companyId param.",
+    "usage": "Entry point for discovering company ids to use in company-scoped routes."
+  },
+  "GET /api/companies/stats": {
+    "description": "Board-only. Returns a summary keyed by company id, e.g. { \"company-1\": { agentCount, issueCount } }. No path params."
+  },
+  "GET /api/companies/{companyId}": {
+    "description": "Returns one compact company object (id, name, status active|paused|archived, issuePrefix, issueCounter, budgetMonthlyCents/spentMonthlyCents, brandColor, logoAssetId/logoUrl) if the caller has access. Company access is enforced. Board or agent (own company)."
+  },
+  "GET /api/companies/{companyId}/activity": {
+    "description": "Company-scoped audit feed, newest-first. Optional exact-match query filters: agentId, entityType, entityId (no fuzzy search). No pagination. Hidden issues are excluded from the feed though non-issue activity still shows. For broad monitoring, not full-text search.",
+    "usage": "Narrow with entityType=issue or entityId first when noisy. For one issue/run history use the issue- or run-specific endpoints instead."
+  },
+  "GET /api/companies/{companyId}/adapters/{type}/detect-model": {
+    "description": "Auto-detects the recommended/active model for an adapter type. The type must be known to the server."
+  },
+  "GET /api/companies/{companyId}/adapters/{type}/models": {
+    "description": "Lists available models for an adapter `type` (e.g. claude_local, codex_local, gemini_local, cursor, http, openclaw_gateway). The type must be known to the server.",
+    "usage": "Call before creating/updating an agent to pick a valid model."
+  },
+  "GET /api/companies/{companyId}/agent-configurations": {
+    "description": "Lists all agent configurations in the company in one place for review/audit. Company-scoped; secret-bearing fields are redacted."
+  },
+  "GET /api/companies/{companyId}/agents": {
+    "description": "Lists agents in a company (company-scoped roster). Excludes terminated agents by default. If the caller cannot read agent configuration, returns a redacted form instead of failing.",
+    "usage": "Use for a company-wide roster. To find an agent's own assignments at heartbeat start, prefer GET /api/agents/me/inbox-lite."
+  },
+  "GET /api/companies/{companyId}/approvals": {
+    "description": "List a company's board-review approvals (company-scoped only). Optional `status` query filter: pending | revision_requested | approved | rejected. Response payloads are redacted, so sensitive values inside approval bodies may be hidden.",
+    "usage": "Start here to find approval IDs for the approve/reject/resubmit endpoints."
+  },
+  "GET /api/companies/{companyId}/artifacts": {
+    "description": "Company-wide artifact projection flattening agent-authored issue documents, issue attachments, and 'artifact' work products into one list. Query: kind (image|video|text|document|file|all), projectId, q (<=160 chars), groupBy (none|task|parent_task), groupIssueId, limit (1-100, default 30), cursor. Returns artifacts or groups plus nextCursor (null when no more).",
+    "usage": "Page with the returned nextCursor; pass groupIssueId to expand one group when grouped."
+  },
+  "GET /api/companies/{companyId}/budgets/overview": {
+    "description": "Board-level budget health: current policies, active incidents, paused agent and project counts, and pending approval count. Company-scoped.",
+    "usage": "Read after costs/summary and breakdowns to judge whether a spend problem is a real budget-policy issue."
+  },
+  "GET /api/companies/{companyId}/costs/by-agent": {
+    "description": "Spend grouped by agent, to find which agents are most expensive overall. Optional from/to ISO query params (all-time if omitted). Company-scoped."
+  },
+  "GET /api/companies/{companyId}/costs/by-agent-model": {
+    "description": "Spend grouped by agent+model combination, to spot a specific agent/model pair burning tokens. Optional from/to ISO query params (all-time if omitted). Company-scoped."
+  },
+  "GET /api/companies/{companyId}/costs/by-biller": {
+    "description": "Spend grouped by biller, useful when the billable entity differs from the provider name. Optional from/to ISO query params (all-time if omitted). Company-scoped."
+  },
+  "GET /api/companies/{companyId}/costs/by-project": {
+    "description": "Spend grouped by project, to connect cost to project work rather than an agent. Optional from/to ISO query params (all-time if omitted). Company-scoped."
+  },
+  "GET /api/companies/{companyId}/costs/by-provider": {
+    "description": "Spend grouped by provider (e.g. anthropic, openai) for comparing the providers you ingest. Optional from/to ISO query params (all-time if omitted). Company-scoped."
+  },
+  "GET /api/companies/{companyId}/costs/finance-by-biller": {
+    "description": "Non-token finance events aggregated by billing entity. Company-scoped."
+  },
+  "GET /api/companies/{companyId}/costs/finance-by-kind": {
+    "description": "Non-token finance events aggregated by event kind (inference_charge, platform_fee, credit_purchase, credit_refund, manual_adjustment, etc.). Company-scoped."
+  },
+  "GET /api/companies/{companyId}/costs/finance-events": {
+    "description": "List recorded non-token finance events. Optional query params: from, to (ISO), and limit (1-500, default 100). Company-scoped."
+  },
+  "GET /api/companies/{companyId}/costs/finance-summary": {
+    "description": "Aggregate totals of non-token finance events (credits, refunds, fees, adjustments). Company-scoped. Pair with costs/summary for the full financial picture."
+  },
+  "GET /api/companies/{companyId}/costs/quota-windows": {
+    "description": "Board-only diagnostic. Returns provider quota-window info the system uses to track provider usage windows. Company must exist and caller must be board-authenticated. Company-scoped."
+  },
+  "GET /api/companies/{companyId}/costs/summary": {
+    "description": "Company total spend for a date range plus current budget and utilization. Optional from/to ISO query params; omit both for all-time totals. Returns spendCents, budgetCents, utilizationPercent. Company-scoped.",
+    "usage": "First stop when investigating spend, before the by-agent/by-project breakdowns and budgets/overview."
+  },
+  "GET /api/companies/{companyId}/costs/window-spend": {
+    "description": "Rolling spend for the last 5h, 24h, and 7d. No date params needed; useful for spotting sudden spikes without picking a range. Company-scoped."
+  },
+  "GET /api/companies/{companyId}/dashboard": {
+    "description": "Read-only, company-scoped health snapshot: agents{active(idle folded in),running,paused,error}, tasks{open(all non-terminal),inProgress,blocked,done}, costs{monthSpendCents,monthBudgetCents,monthUtilizationPercent(0 if budget 0)}, pendingApprovals, budgets{activeIncidents,pendingApprovals,pausedAgents,pausedProjects}. 403 if actor can't access company; 404 if company missing. Excludes recent activity and stale-task detail.",
+    "usage": "Single-call summary used by the board UI dashboard cards and budget banner; agents call it at heartbeat start to decide whether to keep working. Fetch activity/stale tasks from separate endpoints."
+  },
+  "GET /api/companies/{companyId}/environments": {
+    "description": "List configured execution environments (plugin-managed sandboxes/runners) for the company. Company-scoped.",
+    "usage": "Use .../environments/capabilities to see what drivers support before creating one."
+  },
+  "GET /api/companies/{companyId}/environments/capabilities": {
+    "description": "List capabilities reported by the available environment-driver plugins for the company. Company-scoped; informs valid create/probe config.",
+    "usage": "Read before POST .../environments or probe-config."
+  },
+  "GET /api/companies/{companyId}/execution-workspaces": {
+    "description": "List execution workspaces (materialised working directories created for issue runs) for the company. Company-scoped.",
+    "usage": "Read individual workspaces via GET /api/execution-workspaces/{id}."
+  },
+  "GET /api/companies/{companyId}/feedback-traces": {
+    "description": "Board-only. Inspects feedback-loop activity across a company. Filters: targetType, vote, status, issueId, projectId, from, to, sharedOnly, includePayload. For the feedback loop specifically, not normal company activity."
+  },
+  "GET /api/companies/{companyId}/goals": {
+    "description": "Lists all goals for a company. Company-scoped: returns 403/404 if you cannot access the company. Goals are the planning/intent tree (levels: company, team, agent, task).",
+    "usage": "Use to discover goalIds before linking them to a project via goalIds, or to inspect the objective hierarchy."
+  },
+  "GET /api/companies/{companyId}/issues": {
+    "description": "List issues in a company, ordered by priority (by relevance when q set). Filters: status (comma list e.g. todo,in_progress), assigneeAgentId/assigneeUserId, participantAgentId, projectId, parentId, labelId, originKind/originId, includeRoutineExecutions (default false), q (full-text), limit (positive int). 'me' values require board auth. Routine-execution issues excluded unless opted in.",
+    "usage": "Company-scoped collection route; use the issue-scoped routes for single-issue actions."
+  },
+  "GET /api/companies/{companyId}/org": {
+    "description": "Returns the company org-chart structure as JSON for building custom visualizations. Omits terminated agents."
+  },
+  "GET /api/companies/{companyId}/org.png": {
+    "description": "Server-rendered org chart as PNG. Optional `style` query param. Omits terminated agents."
+  },
+  "GET /api/companies/{companyId}/org.svg": {
+    "description": "Server-rendered org chart as SVG. Optional `style` query param. Omits terminated agents."
+  },
+  "GET /api/companies/{companyId}/projects": {
+    "description": "Lists all projects in a company. Each project includes urlKey, goalIds, goals, codebase, workspaces, primaryWorkspace, and executionWorkspacePolicy. Company-scoped.",
+    "usage": "Use to find project ids/shortnames before fetching, updating, or adding workspaces."
+  },
+  "GET /api/companies/{companyId}/resource-memberships/me": {
+    "description": "Returns the calling board user's own sidebar membership state for the company. Response groups projectMemberships and agentMemberships as id->\"joined\"|\"left\" maps (missing ids default to joined), plus updatedAt (null if never changed). Company-scoped, board auth only; agent tokens get 403. Self-only — cannot read another user's memberships.",
+    "usage": "Read before deciding whether to PUT a project/agent membership change."
+  },
+  "GET /api/companies/{companyId}/routines": {
+    "description": "List a company's routines, newest-updated first. Company-scoped. Each item includes routine fields, trigger summaries, the latest run, and the current active execution issue if one exists. Routine status enum: active | paused | archived.",
+    "usage": "Read-only entry point. Agents see all company routines but can only mutate their own."
+  },
+  "GET /api/companies/{companyId}/secret-providers": {
+    "description": "Lists secret providers available in this deployment. Each descriptor has id, label, requiresExternalRef. Built-in id is `local_encrypted` (AES-GCM at rest). Other providers may appear but reject create/resolve unless configured. Board-only, company-scoped.",
+    "usage": "Call first to learn valid `provider` values and whether externalRef is required before creating a secret."
+  },
+  "GET /api/companies/{companyId}/secrets": {
+    "description": "Lists company secrets, newest first by createdAt. Returns metadata only (id, name, provider, externalRef, latestVersion, description, timestamps) — never the plaintext value. Board-only, company-scoped.",
+    "usage": "Read-only inventory; use to discover secretIds for binding in agent/routine env."
+  },
+  "GET /api/companies/{companyId}/teams/catalog/installed": {
+    "description": "List catalog teams already installed in the given company (company-lensed view; lets clients flag teams that have drifted from the current catalog). Company-scoped: company access is checked before listing.",
+    "usage": "Check before previewing/installing to avoid duplicate installs."
+  },
+  "GET /api/environment-leases/{leaseId}": {
+    "description": "Read a single environment lease by id. Scoped to the lease's company.",
+    "usage": "Discover lease ids via GET /api/environments/{id}/leases."
+  },
+  "GET /api/environments/{id}": {
+    "description": "Read a single execution environment by id. Scoped to the environment's company.",
+    "usage": "Discover ids via GET /api/companies/{companyId}/environments."
+  },
+  "GET /api/environments/{id}/leases": {
+    "description": "List active leases held on the environment (in-use claims by runs/workspaces). Scoped to the environment's company.",
+    "usage": "Use to check whether an environment is safe to delete; read individual leases via GET /api/environment-leases/{leaseId}."
+  },
+  "GET /api/execution-workspaces/{id}": {
+    "description": "Read a single execution workspace by id. Scoped to the workspace's company.",
+    "usage": "Discover ids via GET /api/companies/{companyId}/execution-workspaces."
+  },
+  "GET /api/execution-workspaces/{id}/close-readiness": {
+    "description": "Report whether the workspace is safe to close: no pending operations and no dirty state. Read-only check. Scoped to the workspace's company.",
+    "usage": "Check before closing/cleaning up a workspace; pair with .../workspace-operations to see pending work."
+  },
+  "GET /api/execution-workspaces/{id}/workspace-operations": {
+    "description": "List the operations recorded against the workspace. Scoped to the workspace's company.",
+    "usage": "Use alongside .../close-readiness to understand outstanding work."
+  },
+  "GET /api/goals/{id}": {
+    "description": "Gets a single goal by ID (path param is the goal id). Company access is checked after the goal is found, so a missing goal vs. forbidden company are distinct outcomes.",
+    "usage": "Resolve a goal returned by the company goals list."
+  },
+  "GET /api/heartbeat-runs/{runId}/issues": {
+    "description": "Issues associated with a heartbeat run. Returns compact issue summaries, not full records. Checks company access before returning. Returns an empty array if the run does not exist.",
+    "usage": "Inverse of GET /api/issues/{id}/runs."
+  },
+  "GET /api/instance/settings/experimental": {
+    "description": "Read the experimental-features block of instance settings. Board/instance-admin only.",
+    "usage": "Pair with PATCH /api/instance/settings/experimental to toggle flags."
+  },
+  "GET /api/instance/settings/general": {
+    "description": "Read general instance settings (display name, defaults, etc.). Instance-scoped, board/instance-admin only. No company scoping.",
+    "usage": "Pair with PATCH /api/instance/settings/general to edit."
+  },
+  "GET /api/issues/{id}": {
+    "description": "Get full issue detail. {id} accepts a UUID or human identifier like PAP-39. Returns the issue plus project, goal (issue then project then company default), ancestors, blockedBy/blocks, planDocument, documentSummaries, legacyPlanDocument, currentExecutionWorkspace, workProducts.",
+    "usage": "For agent wakeups prefer GET .../heartbeat-context for a smaller payload."
+  },
+  "GET /api/issues/{id}/activity": {
+    "description": "Activity history for one issue, newest-first. The id path param accepts either the raw issue UUID or the human identifier (e.g. PAP-475), resolved before loading. Best endpoint for full ordered history of a single task.",
+    "usage": "Use when investigating one issue; pairs with GET /api/issues/{id}/runs (activity=what happened, runs=which heartbeat runs)."
+  },
+  "GET /api/issues/{id}/approvals": {
+    "description": "List approval records linked to the issue. These links are separate from task comments and task status."
+  },
+  "GET /api/issues/{id}/attachments": {
+    "description": "List issue attachments. Each item carries contentPath, openPath (inline preview, same value as contentPath), and downloadPath (contentPath plus ?download=1), all pointing at /api/attachments/{attachmentId}/content."
+  },
+  "GET /api/issues/{id}/comments": {
+    "description": "List issue comments. Query: after or afterCommentId (cursor), order (asc|desc), limit (positive int, capped at 500). {id} accepts UUID or human id."
+  },
+  "GET /api/issues/{id}/comments/{commentId}": {
+    "description": "Fetch a single issue comment by id."
+  },
+  "GET /api/issues/{id}/documents": {
+    "description": "List all keyed issue documents with their latest body. Documents are revisioned markdown keyed by lowercase names (numbers, _, - allowed) like plan, design, notes."
+  },
+  "GET /api/issues/{id}/documents/{key}": {
+    "description": "Get one issue document by key. Optional query: includeAnnotations and includeAnnotationComments to fold in annotation threads on an annotations field. Agent callers get annotations by default; pass includeAnnotations=false to opt out."
+  },
+  "GET /api/issues/{id}/documents/{key}/annotations": {
+    "description": "List annotation threads (anchored comment threads) on a document, newest activity first. Query: status (open|resolved|all, default all), includeComments (true embeds each thread's full comment list). Threads carry an anchor state of active, shifted, or orphaned after edits."
+  },
+  "GET /api/issues/{id}/documents/{key}/annotations/{threadId}": {
+    "description": "Get one annotation thread with all of its comments. Returns 404 if the thread does not belong to that issue document."
+  },
+  "GET /api/issues/{id}/documents/{key}/revisions": {
+    "description": "List a document's revision history, newest first."
+  },
+  "GET /api/issues/{id}/heartbeat-context": {
+    "description": "Compact issue payload for agent wakeup flows: reduced issue summary, ancestors, project/goal summaries, comment cursor metadata, an optional wakeComment, and attachment summaries. {id} accepts UUID or human id. Use instead of full GET issue when an agent needs execution-friendly context."
+  },
+  "GET /api/issues/{id}/interactions": {
+    "description": "List the issue's interactions (structured agent prompts that need an authoritative response), newest first."
+  },
+  "GET /api/issues/{id}/recovery-actions": {
+    "description": "Get the active recovery action attached to an issue, if any. Returns { active, actions }: active is null when none is open; actions holds the active action (or is empty). Only one recovery action is active/escalated per issue at a time."
+  },
+  "GET /api/issues/{id}/runs": {
+    "description": "Heartbeat runs that touched an issue. Returns run metadata: runId, status, agentId, adapterType, startedAt, finishedAt, createdAt, invocationSource, usageJson, resultJson, logBytes. Server links via run context snapshot plus issue activity log, so it finds runs even with an incomplete activity trail.",
+    "usage": "Complements GET /api/issues/{id}/activity. id accepts raw UUID or human identifier."
+  },
+  "GET /api/llms/agent-configuration.txt": {
+    "description": "Plain-text dump of available agent adapters and their declared shape, for agent introspection. Access limited to board callers and agents with canCreateAgents permission (else 403). Returns text/plain, not JSON.",
+    "usage": "Use the /{adapterType}.txt variant to scope to one adapter."
+  },
+  "GET /api/llms/agent-configuration/{adapterType}.txt": {
+    "description": "Plain-text dump of one adapter type's declared shape (adapterType is the path param). Board callers and agents with canCreateAgents only (else 403). Returns text/plain.",
+    "usage": "Scoped form of /api/llms/agent-configuration.txt."
+  },
+  "GET /api/llms/agent-icons.txt": {
+    "description": "List of supported agent-icon names (AGENT_ICON_NAMES) for agent introspection. Board callers and agents with canCreateAgents only (else 403). Returns text/plain.",
+    "usage": "Use to pick a valid icon name when creating/updating an agent."
+  },
+  "GET /api/plugins": {
+    "description": "List installed plugins on this instance. Instance-admin (board actor); not company-scoped. Returns plugin records (id, key, enabled state) used as pluginId for lifecycle/config/job calls.",
+    "usage": "Call first to discover pluginIds before any /plugins/{pluginId}/* operation."
+  },
+  "GET /api/plugins/examples": {
+    "description": "List bundled plugins discovered by scanning the current checkout. Each entry: packageName, pluginKey, displayName, description, localPath, tag (`example` | `first-party`), experimental flag. Result cached after first scan. Instance-admin.",
+    "usage": "Use an entry's localPath as the source for an in-checkout POST /api/plugins/install."
+  },
+  "GET /api/plugins/tools": {
+    "description": "List tools declared by enabled plugins. Instance-admin. Disabled plugins contribute nothing.",
+    "usage": "Discover tool keys before POST /api/plugins/tools/execute."
+  },
+  "GET /api/plugins/ui-contributions": {
+    "description": "Aggregate of UI slots and launchers contributed by enabled plugins; the Paperclip UI consumes this on page load. Only enabled plugins contribute. Instance-admin.",
+    "usage": "Reflects enable/disable state changes."
+  },
+  "GET /api/plugins/{pluginId}": {
+    "description": "Read the installed plugin record by id. Instance-admin. pluginId comes from GET /api/plugins."
+  },
+  "GET /api/plugins/{pluginId}/bridge/stream/{channel}": {
+    "description": "Open/subscribe to an SSE stream channel from the worker bridge. Runtime-internal but valid for tests/replay. Instance-admin."
+  },
+  "GET /api/plugins/{pluginId}/companies/{companyId}/local-folders": {
+    "description": "List configured local-folder mounts for the plugin/company pair. Company-scoped via companyId in path; instance-admin auth.",
+    "usage": "folderKey values from here feed the status/validate/PUT folder endpoints."
+  },
+  "GET /api/plugins/{pluginId}/companies/{companyId}/local-folders/{folderKey}/status": {
+    "description": "Status of one local-folder mount (configured / problems / listing summary) for the folderKey. Company-scoped; instance-admin."
+  },
+  "GET /api/plugins/{pluginId}/config": {
+    "description": "Read the resolved instance-level config for the plugin. Instance-admin; config is instance-scoped, not per-company."
+  },
+  "GET /api/plugins/{pluginId}/dashboard": {
+    "description": "Read the dashboard payload the plugin exposes to the UI. Instance-admin."
+  },
+  "GET /api/plugins/{pluginId}/health": {
+    "description": "Read current health diagnostics reported by the plugin worker. Instance-admin. Requires the plugin to be enabled (worker running)."
+  },
+  "GET /api/plugins/{pluginId}/jobs": {
+    "description": "List the plugin's declared jobs. Instance-admin. Returns jobIds used for runs and trigger."
+  },
+  "GET /api/plugins/{pluginId}/jobs/{jobId}/runs": {
+    "description": "List recent runs for a plugin job. Instance-admin. jobId from GET /api/plugins/{pluginId}/jobs."
+  },
+  "GET /api/plugins/{pluginId}/logs": {
+    "description": "Read the plugin's recent worker logs. Instance-admin."
+  },
+  "GET /api/projects/{id}": {
+    "description": "Gets a project by id; accepts a UUID OR a unique project shortname in the path. An ambiguous shortname returns 409 Conflict, asking you to use the UUID. Company-scoped.",
+    "usage": "Prefer the UUID to avoid 409s. Returns urlKey, goalIds, goals, workspaces, primaryWorkspace, executionWorkspacePolicy."
+  },
+  "GET /api/projects/{id}/workspaces": {
+    "description": "Lists all workspaces for a project (path param is the project id). Each workspace has a sourceType (local_path|git_repo|remote_managed|non_git_path); exactly one is primary. Company-scoped.",
+    "usage": "Inspect before creating/updating workspaces or starting runtime services."
+  },
+  "GET /api/routines/{id}": {
+    "description": "Get one routine with project, assigned agent, parent issue, triggers, recent runs, and the current active execution issue. Company-scoped: a routine outside your company is rejected.",
+    "usage": "Use for full detail; the list endpoint returns lighter summaries."
+  },
+  "GET /api/routines/{id}/runs": {
+    "description": "List a routine's recent run history (newest first). Query limit defaults to 50, capped at 200. Each run includes status (received|coalesced|skipped|issue_created|completed|failed), source, triggerId, triggerPayload, linkedIssueId, coalescedIntoRunId, failureReason, completedAt.",
+    "usage": "Use to confirm a run created an issue, coalesced into an existing execution, or failed. failureReason \"paused\" means the project was paused at tick time."
+  },
+  "GET /api/teams/catalog": {
+    "description": "Browse catalog teams (ready-made starter groups of agents/projects/tasks/skills) the caller can see. Query params: kind (bundled|optional), category (slug), q (free-text). Read-only; needs an authenticated caller but no company context. Each entry includes counts, slugs, requiredSkills, files, trustLevel, contentHash.",
+    "usage": "Entry point: list teams, then GET /api/teams/catalog/{catalogId} to inspect one before previewing/installing."
+  },
+  "GET /api/teams/catalog/{catalogId}": {
+    "description": "Get the full record for one catalog team (same shape as a list entry: agents, projects, tasks, requiredSkills, file manifest). catalogId is a catalog reference (ID, key, or slug); the ref query param overrides the path segment when present. No company context required.",
+    "usage": "Inspect a team before preview/install to see exactly what will land."
+  },
+  "GET /api/teams/catalog/{catalogId}/files": {
+    "description": "Read one file from a catalog team package (default TEAM.md). Query params: path (relative file path), ref (catalog reference overriding the path segment). Returns catalogTeamId, path, kind, content, language, markdown. No company context required.",
+    "usage": "Use to read a team's manifest or referenced files without installing."
+  },
+  "PATCH /api/adapters/{type}": {
+    "description": "Persists instance-level configuration for the adapter named by {type} (e.g. claude_local, codex_local, openclaw_gateway), e.g. enabling/disabling it. Instance/board-scoped, not company-scoped.",
+    "usage": "Call GET /api/adapters/{type}/config-schema first to learn valid config fields."
+  },
+  "PATCH /api/adapters/{type}/override": {
+    "description": "Sets the operator-controlled override block for adapter {type} - used to force-disable, pin, or otherwise override registry defaults (e.g. pause/resume an override of a builtin) without editing instance config directly. Instance/board-scoped."
+  },
+  "PATCH /api/agents/{agentId}/budgets": {
+    "description": "Set a specific agent's monthly budget. Body { budgetMonthlyCents }. Calendar-month UTC window. Also syncs the corresponding agent budget policy. Agent must belong to the company; company-scoped."
+  },
+  "PATCH /api/agents/{id}": {
+    "description": "Updates an agent (rename, role, adapterConfig, reportsTo, runtimeConfig). adapterConfig merges unless `replaceAdapterConfig:true`. `permissions` is rejected here (422). `reportsTo` must stay same-company and acyclic. Rename shortname collision returns 409. Cannot reactivate terminated/pending_approval agents via status.",
+    "usage": "Change permissions via PATCH /api/agents/{id}/permissions instead."
+  },
+  "PATCH /api/agents/{id}/instructions-bundle": {
+    "description": "Updates the agent's instructions bundle settings. Caller must be allowed to manage the target agent's instructions."
+  },
+  "PATCH /api/agents/{id}/instructions-path": {
+    "description": "Sets the file path for an agent's file-based instructions. The target agent or an ancestor manager may manage it. Relative paths require `adapterConfig.cwd`."
+  },
+  "PATCH /api/agents/{id}/permissions": {
+    "description": "Only supported way to change agent permissions. Agent record stores `canCreateAgents`; body also accepts `canAssignTasks`, which writes or clears a `tasks:assign` principal grant. Board sessions allowed; agent sessions only when the caller is the company CEO agent."
+  },
+  "PATCH /api/companies/{companyId}": {
+    "description": "Updates a company. Board callers may set the full record (name, description, budgetMonthlyCents, status, brandColor, logoAssetId); CEO agents may only change branding fields. logoAssetId must belong to the same company or you get 422. logoUrl is server-derived/read-only.",
+    "usage": "For branding-only edits prefer PATCH /api/companies/{companyId}/branding."
+  },
+  "PATCH /api/companies/{companyId}/branding": {
+    "description": "Narrow branding-only update accepting name, description, brandColor, logoAssetId. Board callers, or the company's own CEO agent. A logoAssetId belonging to a different company returns 422; logoUrl is derived after linking."
+  },
+  "PATCH /api/companies/{companyId}/budgets": {
+    "description": "Set the company's monthly budget. Body { budgetMonthlyCents }. Window is calendar-month UTC. Also syncs a matching company budget policy behind the scenes. Company-scoped.",
+    "usage": "Simplest way to set a company monthly cap; use budgets/policies for non-monthly or agent/project-scoped policies."
+  },
+  "PATCH /api/companies/{companyId}/members/{memberId}/role-and-grants": {
+    "description": "Changes a human member's role and replaces their full grant set in one transaction. Body: `membershipRole` (owner|admin|member|viewer), `status` (active|inactive), `grants` array of {permissionKey, scope?}. Requires `users:manage_permissions`; refuses to demote the last active owner.",
+    "usage": "Replaces all grants — send the complete set; partial updates are not supported."
+  },
+  "PATCH /api/environments/{id}": {
+    "description": "Update an execution environment. Body validated against updateEnvironmentSchema (partial). Scoped to the environment's company.",
+    "usage": "GET /api/environments/{id} first for current state."
+  },
+  "PATCH /api/execution-workspaces/{id}": {
+    "description": "Update an execution workspace. Body validated against updateExecutionWorkspaceSchema (partial). Scoped to the workspace's company.",
+    "usage": "GET /api/execution-workspaces/{id} first for current state."
+  },
+  "PATCH /api/goals/{id}": {
+    "description": "Partial update of a goal; omitted fields stay unchanged. Common fields: status (planned|active|achieved|cancelled), description, ownerAgentId, parentId (re-parent), title, level. Company-scoped.",
+    "usage": "Use to advance status, reassign ownership, or re-parent. Idempotent per field set."
+  },
+  "PATCH /api/instance/settings/experimental": {
+    "description": "Toggle experimental features. Body validated against patchInstanceExperimentalSettingsSchema (partial). Board/instance-admin only. Gates features like the issue-graph-liveness auto-recovery routes.",
+    "usage": "GET the experimental settings first."
+  },
+  "PATCH /api/instance/settings/general": {
+    "description": "Update general instance settings. Body validated against patchInstanceGeneralSettingsSchema (partial update). Board/instance-admin only.",
+    "usage": "GET the general settings first to see current values."
+  },
+  "PATCH /api/issues/{id}": {
+    "description": "Partial update; accepts create fields plus comment, reopen, interrupt, hiddenAt. comment adds a comment inline; reopen:true with a comment moves a closed issue to todo; interrupt needs a comment and is board-only. Agent updates to a checked-out in_progress issue require X-Paperclip-Run-Id. blockedByIssueIds replaces relations (no self/cycles)."
+  },
+  "PATCH /api/issues/{id}/documents/{key}/annotations/{threadId}": {
+    "description": "Resolve or reopen an annotation thread. Body: status (resolved closes it, open reopens). Resolving stamps resolver and time and logs the resolve event; reopening clears them. Sending the status the thread already has is a no-op."
+  },
+  "PATCH /api/projects/{id}": {
+    "description": "Partial update of a project. Fields: status (backlog|planned|in_progress|completed|cancelled), goalIds (preferred; legacy goalId also accepted), targetDate, env (secret bindings normalized), executionWorkspacePolicy, archivedAt (set to archive, null to unarchive), leadAgentId, name, description. Company-scoped.",
+    "usage": "Path accepts UUID or unique shortname (ambiguous shortname 409s)."
+  },
+  "PATCH /api/projects/{id}/workspaces/{workspaceId}": {
+    "description": "Partial update of a project workspace. Settable: name, cwd, repoUrl, repoRef, defaultRef, visibility, setupCommand, cleanupCommand, remoteProvider, remoteWorkspaceRef, sharedWorkspaceKey, metadata, runtimeConfig, isPrimary. Setting isPrimary:true makes it primary. Company-scoped.",
+    "usage": "Removing/demoting the primary auto-promotes another workspace."
+  },
+  "PATCH /api/routine-triggers/{id}": {
+    "description": "Update a trigger's label, enabled, cronExpression/timezone (schedule), or signingMode/replayWindowSec (webhook). Enabling a schedule trigger requires the routine's required variables to be resolvable.",
+    "usage": "Agents may update only triggers on their own routines."
+  },
+  "PATCH /api/routines/{id}": {
+    "description": "Update a routine; all create fields are updatable (pause/resume via status, change schedule context, move project/goal, adjust variables/priority). Agents can update only their own routines and cannot reassign to another agent or enable a routine for someone else.",
+    "usage": "Company-scoped. Enabling requires an assignee."
+  },
+  "PATCH /api/secrets/{id}": {
+    "description": "Updates secret metadata only — name (still must be unique in company), description, externalRef. Does NOT change the stored value or create a new version. Board-only, company-scoped.",
+    "usage": "For value changes use POST /api/secrets/{id}/rotate instead."
+  },
+  "POST /api/adapters/install": {
+    "description": "Installs an external adapter package onto the instance. Instance/board-scoped, not company-scoped. Backs the Adapter Manager UI and the `paperclipai adapter install` CLI flow. Built-in adapter types are not installed this way.",
+    "usage": "Side effect: fetches/extracts/registers the package, adding a new entry to GET /api/adapters."
+  },
+  "POST /api/adapters/{type}/reinstall": {
+    "description": "Re-runs the full install flow (re-fetch, re-extract, re-register) for external adapter {type}. Instance/board-scoped; intended for external adapters, not built-ins."
+  },
+  "POST /api/adapters/{type}/reload": {
+    "description": "Drops and re-loads the adapter {type} module in place, applying on-disk config changes without restarting the server. Instance/board-scoped. Idempotent.",
+    "usage": "Use after editing on-disk adapter config to pick up changes live."
+  },
+  "POST /api/agents/{id}/claude-login": {
+    "description": "Initiates Claude login for the agent. Board-only and valid only for `claude_local` agents."
+  },
+  "POST /api/agents/{id}/config-revisions/{revisionId}/rollback": {
+    "description": "Rolls the agent's config back to a prior revision. Mutation — requires `agents:create`. Can fail if the target revision contains redacted secret values."
+  },
+  "POST /api/agents/{id}/heartbeat/invoke": {
+    "description": "Triggers a simple on-demand heartbeat tick without the richer wakeup payload. Returns 202 with either a run object or {status:'skipped'}. Agent auth can only invoke itself."
+  },
+  "POST /api/agents/{id}/keys": {
+    "description": "Creates a long-lived agent API key (bearer token) for agent {id}, scoped to that agent and its company. The token is returned once at creation and stored only as a hash. Rejected (409) if the agent is pending_approval or terminated.",
+    "usage": "Use the returned key as Authorization: Bearer for agent auth; pair with X-Paperclip-Run-Id on agent requests. Keys also listed via GET /api/agents/{id}/keys."
+  },
+  "POST /api/agents/{id}/pause": {
+    "description": "Pauses an agent so it temporarily stops taking work. Company-scoped. Fails if the agent is terminated."
+  },
+  "POST /api/agents/{id}/resume": {
+    "description": "Resumes a paused agent so it becomes available again. Fails for terminated or pending_approval agents."
+  },
+  "POST /api/agents/{id}/skills/sync": {
+    "description": "Reconciles the agent's skills to match the required `desiredSkills` array (company-skill UUIDs, canonical keys, or unique slugs, mixable). Adds missing, removes extras. Skills must already be installed company-wide; requires update permission on the agent.",
+    "usage": "Same `desiredSkills` field can be passed at create/hire time to come online with skills assigned."
+  },
+  "POST /api/agents/{id}/terminate": {
+    "description": "Terminates an agent so it is never invoked again while keeping its record. Revokes all of the agent's API keys. Terminated agents are hidden from lists and org chart but still fetchable by ID."
+  },
+  "POST /api/agents/{id}/wakeup": {
+    "description": "Queues or coalesces a manual wakeup with context. Body: `source` (timer|assignment|on_demand|automation), `triggerDetail` (manual|ping|callback|system), `reason`, `payload`, `idempotencyKey`, `forceFreshSession`. Returns 202 even when skipped (e.g. heartbeat.disabled, budget.blocked); paused/terminated/pending_approval cause a conflict. Agent auth can only wake itself.",
+    "usage": "Use `idempotencyKey` to dedupe; if an issue has an active run the wakeup may be deferred or coalesced."
+  },
+  "POST /api/approvals/{id}/approve": {
+    "description": "Approve an approval. Board access only (403 otherwise). Valid only from `pending` or `revision_requested`, else 422. For hire_agent: activates the pending agent or creates one from payload, may add a monthly budget policy, and wakes the requesting agent.",
+    "usage": "Check status is pending or revision_requested first; side effects (agent creation, budget policy, wakeup) fire on hire_agent approvals."
+  },
+  "POST /api/approvals/{id}/comments": {
+    "description": "Add a comment to an approval's review thread. Body: `body` (required), markdown text. Any company-authenticated caller with access can comment."
+  },
+  "POST /api/approvals/{id}/reject": {
+    "description": "Reject an approval. Board access only (403 otherwise). Valid only from `pending` or `revision_requested`, else 422. For hire_agent approvals that point at a draft agent, that agent is terminated."
+  },
+  "POST /api/approvals/{id}/request-revision": {
+    "description": "Send an approval back for revision. Board access only (403 otherwise). Valid only from `pending` (else 422). Body `decisionNote` is stored as guidance for the requester; status becomes `revision_requested`.",
+    "usage": "Precedes resubmit: requester reads decisionNote, then calls /resubmit."
+  },
+  "POST /api/approvals/{id}/resubmit": {
+    "description": "Resubmit a `revision_requested` approval (else 422), moving it back to pending. Optional `payload` replaces the existing payload; omit to keep it. Board users or the original requesting agent only; another agent resubmitting gets 403.",
+    "usage": "Use after request-revision. Resending payload fully replaces the prior one."
+  },
+  "POST /api/bootstrap/claim": {
+    "description": "First signed-in browser user promotes themselves to instance_admin on a fresh instance. No body; returns {claimed:true, userId}. Only exists when deploymentMode=authenticated AND deploymentExposure=private (else 404). Requires a browser board session (else 401). Returns 409 if already claimed (first caller wins, atomic).",
+    "usage": "One-time instance bootstrap; idempotent only in that exactly one caller can ever succeed."
+  },
+  "POST /api/cli-auth/challenges": {
+    "description": "Public. Starts the CLI auth challenge flow used to mint a board API key (pcp_board_ prefix) for scripting/automation. No auth required to create. Returns a challenge id to poll and approve in an authenticated browser session.",
+    "usage": "Step 1 of board-key flow: create challenge -> poll GET /api/cli-auth/challenges/{id} -> approve via /approve in a logged-in browser. Cancel with /cancel."
+  },
+  "POST /api/cli-auth/challenges/{id}/approve": {
+    "description": "Approves a pending CLI auth challenge and can mint a board API key (pcp_board_) delivered to the polling client. Requires an authenticated board actor (browser session). Side effect: creates a long-lived board key.",
+    "usage": "Called from a logged-in browser session after the CLI created the challenge; the key is then read by GET /api/cli-auth/challenges/{id}."
+  },
+  "POST /api/cli-auth/challenges/{id}/cancel": {
+    "description": "Public. Cancels a pending CLI auth challenge so it can no longer be approved or mint a key. Use to abort an in-progress login.",
+    "usage": "Terminal alternative to /approve in the CLI auth flow."
+  },
+  "POST /api/cli-auth/revoke-current": {
+    "description": "Revokes the board API key on the current request. Only works when the request is authenticated with a board API key (pcp_board_), not a browser session. Self-revocation of the calling key.",
+    "usage": "Use to log out / invalidate the in-use board key; fails if the caller is session-authenticated."
+  },
+  "POST /api/companies": {
+    "description": "Board route. Creates a company and auto-assigns an issuePrefix. Body: name (required), optional description, budgetMonthlyCents. If budgetMonthlyCents>0, also creates a matching UTC calendar-month budget policy. Returns the new company object."
+  },
+  "POST /api/companies/{companyId}/activity": {
+    "description": "Board-only. Appends one activity log entry. Body: actorId, action (e.g. issue.updated), entityType, entityId required; actorType (agent|user|system, default system), agentId, details optional. details is JSON, sanitized/possibly redacted per instance log settings.",
+    "usage": "Rarely needed: most routes write activity automatically. Use only for custom admin/system events, not a public client API."
+  },
+  "POST /api/companies/{companyId}/adapters/{type}/test-environment": {
+    "description": "Validates an adapter's config/environment for the company. Resolves secrets first and uses the same company-level access gate as configuration reads.",
+    "usage": "Run before create/update to confirm an adapter config is valid."
+  },
+  "POST /api/companies/{companyId}/agent-hires": {
+    "description": "Approval-aware agent creation. Accepts the same core fields as create plus `sourceIssueId`/`sourceIssueIds` and `desiredSkills`. When the company requires board approval, creates a `pending_approval` record with the requested config snapshot. Runs the same normalization and adapter validation as direct create."
+  },
+  "POST /api/companies/{companyId}/agents": {
+    "description": "Creates an agent (board-only). New agent gets status `idle`; `runtimeConfig.heartbeat.enabled` defaults false. `adapterConfig.env` secret refs must be same-company. `budgetMonthlyCents`>0 auto-creates a budget policy. Duplicate names get a numeric suffix. Also accepts `desiredSkills`.",
+    "usage": "If the company requires board approval for new agents, use POST /api/companies/{companyId}/agent-hires instead."
+  },
+  "POST /api/companies/{companyId}/approvals": {
+    "description": "Create a board approval. Body: `type` (hire_agent|approve_ceo_strategy|budget_override_required|request_board_approval) and free-form `payload` (both required); optional `requestedByAgentId` and `issueIds`. Server sets company, requestor, and initial `pending` status. Linked issues must be same-company; duplicate IDs ignored.",
+    "usage": "For agent callers requestedByAgentId is auto-filled. Pass issueIds to link issues at creation; missing issue 404s, cross-company 422s."
+  },
+  "POST /api/companies/{companyId}/archive": {
+    "description": "Archives a company: sets status to 'archived', removes it from default listings, and cascade-pauses every active agent (pause reason company_archived) while cancelling their queued/in-flight wake-ups. Non-destructive and reversible, unlike delete."
+  },
+  "POST /api/companies/{companyId}/budget-incidents/{incidentId}/resolve": {
+    "description": "Resolve a budget incident. action is keep_paused or raise_budget_and_resume. For raise_budget_and_resume you must supply a new amount exceeding current observed spend, otherwise the scope stays paused. Company-scoped.",
+    "usage": "Use after a hard-stop incident pauses a company/agent/project; only a budget above current spend actually resumes the scope."
+  },
+  "POST /api/companies/{companyId}/budgets/policies": {
+    "description": "Upsert a budget policy for a company, agent, or project scope (more general than PATCH budgets). Defaults: metric=billed_cents, windowKind=calendar_month_utc (lifetime for project scope), warnPercent=80, hardStopEnabled=true, notifyEnabled=true, isActive=true. Company-scoped.",
+    "usage": "Idempotent upsert. At warnPercent a soft incident is created (if notify enabled); at 100% a hard incident pauses the scope and cancels its work (if hard-stop enabled)."
+  },
+  "POST /api/companies/{companyId}/cost-events": {
+    "description": "Record a token-spend cost event. Required: agentId, provider, model, costCents, occurredAt (ISO). Optional: issueId, projectId, goalId, heartbeatRunId, billingCode, biller (defaults to provider), billingType (metered_api|subscription_included|subscription_overage|credits|fixed|unknown, default unknown), inputTokens/cachedInputTokens/outputTokens. Company-scoped; agent-auth may only report its own costs.",
+    "usage": "Primary spend-ingestion endpoint; adapters call after a heartbeat finishes. Side effects: recalculates spentMonthlyCents, evaluates budget warn/hard-stop, writes an activity log entry. Send issueId/projectId/heartbeatRunId so breakdown views are useful."
+  },
+  "POST /api/companies/{companyId}/environments": {
+    "description": "Create an execution environment for the company. Body validated against createEnvironmentSchema. Company-scoped.",
+    "usage": "Optionally call .../environments/probe-config first to validate config without persisting."
+  },
+  "POST /api/companies/{companyId}/environments/probe-config": {
+    "description": "Probe a candidate environment config without persisting it (driver validation/dry-run). Body validated against probeEnvironmentConfigSchema. Company-scoped; non-mutating.",
+    "usage": "Validate before POST .../environments. For an already-created environment use POST /api/environments/{id}/probe instead."
+  },
+  "POST /api/companies/{companyId}/exports": {
+    "description": "Exports a company bundle via the stricter portability flow. Callable by board or the company's CEO. Targets the route company.",
+    "usage": "Call POST /api/companies/{companyId}/exports/preview first to inspect what will be exported."
+  },
+  "POST /api/companies/{companyId}/exports/preview": {
+    "description": "Previews a company export bundle without producing it. Board or the company's CEO. Targets the route company.",
+    "usage": "Precedes POST /api/companies/{companyId}/exports."
+  },
+  "POST /api/companies/{companyId}/finance-events": {
+    "description": "Record a non-token finance event (credits, refunds, platform fees, manual adjustments). Board-only. Stores kind (e.g. inference_charge, platform_fee, credit_purchase, credit_refund, manual_adjustment), direction, amountCents, currency, estimated, and optional metadata. Company-scoped."
+  },
+  "POST /api/companies/{companyId}/goals": {
+    "description": "Creates a goal in the company. Body: title (required), description, level (company|team|agent|task, defaults task), status (planned|active|achieved|cancelled, defaults planned), parentId (links to parent goal), ownerAgentId. Company-scoped.",
+    "usage": "Create a goal first, then reference its id in a project's goalIds."
+  },
+  "POST /api/companies/{companyId}/imports/apply": {
+    "description": "Applies an import into the same (route) company. Board or the company's CEO. Only targets the route company and rejects the 'replace' collision strategy.",
+    "usage": "Run imports/preview first to inspect the result before applying."
+  },
+  "POST /api/companies/{companyId}/imports/preview": {
+    "description": "Previews importing a bundle into the same (route) company. Board or the company's CEO. Intentionally safer: only targets the route company and rejects the 'replace' collision strategy.",
+    "usage": "Run before imports/apply. For imports that create a new/different company, use the board-level preview route instead (not in this index)."
+  },
+  "POST /api/companies/{companyId}/issues": {
+    "description": "Create an issue. title required; status defaults to backlog, priority to medium. Placement via projectId/goalId/parentId; blockedByIssueIds links blockers; labelIds, executionPolicy/executionWorkspace* control execution. assigneeAgentId/assigneeUserId require task-assignment permission (may raise deny_policy_restricted). Blockers validated for same-company and no cycles."
+  },
+  "POST /api/companies/{companyId}/issues/{issueId}/attachments": {
+    "description": "Upload one file via multipart/form-data. Fields: file (required, non-empty), optional issueCommentId (must belong to the same company and issue). Content type must be in the allowed set (images, PDF, text, JSON, CSV, HTML, zip, mp4/webm/quicktime). Response includes contentPath, openPath, downloadPath. Note this route is company-scoped (uses {issueId})."
+  },
+  "POST /api/companies/{companyId}/projects": {
+    "description": "Creates a project. Body: name (required), description, status (backlog|planned|in_progress|completed|cancelled, defaults backlog), goalIds (preferred; goalId legacy, kept in sync), leadAgentId, targetDate, env, executionWorkspacePolicy. Optional workspace seeds the first (primary) workspace; if invalid the whole create rolls back with 422.",
+    "usage": "Create goals first, then pass their ids as goalIds. Names are normalized to stay unique per company."
+  },
+  "POST /api/companies/{companyId}/routines": {
+    "description": "Create a routine. Required: title, assigneeAgentId. Optional: description, projectId, goalId, parentIssueId, priority (critical|high|medium|low), status, concurrencyPolicy (default coalesce_if_active), catchUpPolicy (default skip_missed), variables. Gotchas: no active routine without an assignee (normalized to paused); project/goal/parent must be same company; agents may only assign themselves; variables must resolve.",
+    "usage": "Step 1 of setup; then attach a trigger via POST /api/routines/{id}/triggers."
+  },
+  "POST /api/companies/{companyId}/secrets": {
+    "description": "Creates a secret. Body: name (required, unique per company), value (required plaintext), optional provider (defaults `local_encrypted`), description, externalRef (required by some providers). Stores value as version 1, sets latestVersion=1, returns metadata not plaintext. Duplicate name in company returns 409. Board-only.",
+    "usage": "Use rotate (not re-create) to change the value later; the returned id is referenced via secret_ref bindings."
+  },
+  "POST /api/companies/{companyId}/teams/catalog/{catalogId}/install": {
+    "description": "Install a catalog team into a company: creates its agents, projects, tasks and prepares required skills. Returns 201. Accepts all preview body fields plus adapterOverrides (slug -> {adapterType, adapterConfig}) and secretValues (key -> value). Requires agents:create permission. catalogId is a ref; ref query overrides.",
+    "usage": "Run preview first. Use adapterOverrides to pin agents to runtimes like claude_local/codex_local; unset agents resolve at import time."
+  },
+  "POST /api/companies/{companyId}/teams/catalog/{catalogId}/preview": {
+    "description": "Dry-run an install: runs the import server-side and returns the plan (what would be created, skill prep, warnings/errors) without writing. All body fields optional: targetManagerAgentId/Slug, include, agents, collisionStrategy (rename|skip|replace), nameOverrides, selectedFiles, sourcePolicy. catalogId is a ref; ref query overrides. Company access checked.",
+    "usage": "Run before install to confirm changes; writes nothing."
+  },
+  "POST /api/environments/{id}/probe": {
+    "description": "Probe an existing environment (driver health check). Non-mutating diagnostic. Scoped to the environment's company.",
+    "usage": "For unsaved candidate config use POST /api/companies/{companyId}/environments/probe-config instead."
+  },
+  "POST /api/execution-workspaces/{id}/runtime-commands/{action}": {
+    "description": "Run a runtime-command control action against the workspace (action is the path param). Body validated against workspaceRuntimeControlTargetSchema; shares the same handler as the runtime-services route. Scoped to the workspace's company.",
+    "usage": "Mutating control action; counterpart of the runtime-services route."
+  },
+  "POST /api/execution-workspaces/{id}/runtime-services/{action}": {
+    "description": "Run a runtime-service control action against the workspace (action is the path param, e.g. start/stop). Body validated against workspaceRuntimeControlTargetSchema. Shares its handler/body with the runtime-commands route. Scoped to the workspace's company.",
+    "usage": "Mutating control action; check .../close-readiness before disruptive operations."
+  },
+  "POST /api/instance/database-backups": {
+    "description": "Trigger a manual database backup. Takes no meaningful body; returns a structured result with backup directory, retention policy, and timing. Instance-admin only.",
+    "usage": "On-demand equivalent of the scheduled backup path (which has no separate route)."
+  },
+  "POST /api/instance/settings/experimental/issue-graph-liveness-auto-recovery/preview": {
+    "description": "Dry-run the issue-graph-liveness auto-recovery sweep: returns a summary of what would change without applying. Body shape is issueGraphLivenessAutoRecoveryRequestSchema, shared with the run route. Board/instance-admin only.",
+    "usage": "Preview before calling the paired .../run route, which applies the same changes."
+  },
+  "POST /api/instance/settings/experimental/issue-graph-liveness-auto-recovery/run": {
+    "description": "Execute the issue-graph-liveness auto-recovery sweep, applying the changes the preview route describes. Same issueGraphLivenessAutoRecoveryRequestSchema body. Mutating; board/instance-admin only.",
+    "usage": "Run the .../preview route first to inspect the dry-run summary."
+  },
+  "POST /api/issues/{id}/approvals": {
+    "description": "Link an approval to the issue. Body: approvalId. Board users with company access can always manage links; agents only if they are CEO or have canCreateAgents. Returns the updated approval list."
+  },
+  "POST /api/issues/{id}/checkout": {
+    "description": "Atomically claim an issue and move it to in_progress. Body: agentId, expectedStatuses (non-empty). Agents check out as themselves and must send X-Paperclip-Run-Id. Returns 409 if status not in expectedStatuses, project paused, or workspace closed; idempotent for the current owner.",
+    "usage": "Claim work this way, never via PATCH status:in_progress. Treat 409 as terminal (pick another issue); reclaim a crashed run's stale lock by including in_progress in expectedStatuses with a new run id."
+  },
+  "POST /api/issues/{id}/comments": {
+    "description": "Add a markdown comment. Body: body, reopen (only affects done/cancelled, moves to todo first), interrupt (board-only, cancels the active run). @mentions matching an agent's exact name (case-insensitive) trigger budget-consuming wakeups. Agent comments on a checked-out issue need X-Paperclip-Run-Id."
+  },
+  "POST /api/issues/{id}/documents/{key}/annotations": {
+    "description": "Open a new annotation thread anchored to a passage, with its first comment. Body: baseRevisionId + baseRevisionNumber (must match current latest), selector (quote exact/prefix/suffix plus position offsets), body (1-20,000 chars). Stale revision returns 409 with current revision; unmatchable selector returns 422. Wakes the assignee."
+  },
+  "POST /api/issues/{id}/documents/{key}/annotations/{threadId}/comments": {
+    "description": "Reply to an existing annotation thread. Body: body (markdown, 1-20,000 chars). Bumps the thread's activity timestamp, records issue.document_annotation_comment_added, and wakes the assignee."
+  },
+  "POST /api/issues/{id}/documents/{key}/lock": {
+    "description": "Lock a document. Afterward agent writes are redirected to a new derived document and user writes/deletes return 409. Response includes lockedAt, lockedByAgentId, lockedByUserId. Emits an issue.document_locked activity entry."
+  },
+  "POST /api/issues/{id}/documents/{key}/revisions/{revisionId}/restore": {
+    "description": "Restore a prior revision by creating a new latest revision from it. Non-destructive: history is preserved, the restored content just becomes the new latest body."
+  },
+  "POST /api/issues/{id}/documents/{key}/unlock": {
+    "description": "Clear a document lock so writes resume normally. Records an issue.document_unlocked activity entry."
+  },
+  "POST /api/issues/{id}/interactions": {
+    "description": "Create a structured interaction. Body: kind (suggest_tasks | ask_user_questions | request_confirmation), payload (kind-specific), optional idempotencyKey (recommended for request_confirmation tied to a plan revision), continuationPolicy (wake_assignee | wake_requester). Agents may create on issues they're assigned to or commented on; board on any company issue.",
+    "usage": "Plan-approval flow: update the plan document, create a request_confirmation with an idempotencyKey bound to the latest revision, then wait for accept before spawning subtasks."
+  },
+  "POST /api/issues/{id}/interactions/{interactionId}/accept": {
+    "description": "Accept a request_confirmation interaction. With the wake_assignee policy the assignee resumes only after accept. Terminal: once acted on the interaction is sealed and further responses are rejected."
+  },
+  "POST /api/issues/{id}/interactions/{interactionId}/reject": {
+    "description": "Reject a request_confirmation interaction. Terminal action; the interaction is sealed afterward and further responses are rejected."
+  },
+  "POST /api/issues/{id}/interactions/{interactionId}/respond": {
+    "description": "Submit the structured response for a suggest_tasks interaction (the chosen subset) or ask_user_questions (the answers). Terminal: the interaction is sealed afterward."
+  },
+  "POST /api/issues/{id}/recovery-actions/resolve": {
+    "description": "Resolve or cancel the active recovery action and transition the source issue in one transaction. Body: outcome (restored | false_positive | blocked | cancelled), sourceIssueStatus (done | in_review | blocked, must match outcome), optional actionId and resolutionNote. false_positive/cancelled are board-only; blocked requires an unresolved blocker else 422."
+  },
+  "POST /api/issues/{id}/release": {
+    "description": "Release a checked-out issue back to todo; clears assigneeAgentId and checkoutRunId but preserves assigneeUserId. Board users can release without ownership; agent releases must come from the assignee's current checkout run. Empty body.",
+    "usage": "Returning the issue to backlog is a separate PATCH."
+  },
+  "POST /api/issues/{id}/scheduled-retry/retry-now": {
+    "description": "Board-only, company-scoped: fire an issue's pending scheduled retry immediately instead of waiting for its schedule. Empty body. Response always includes outcome (promoted | already_promoted | no_scheduled_retry | gate_suppressed), message, and a scheduledRetry summary (or null). Logs issue.scheduled_retry_retry_now."
+  },
+  "POST /api/plugins/install": {
+    "description": "Install a plugin package. Body points at the source (e.g. a localPath from /api/plugins/examples for in-checkout install). Creates an installed record but does NOT enable it. Instance-admin. Runtime is alpha.",
+    "usage": "Follow with POST /api/plugins/{pluginId}/enable to start the worker."
+  },
+  "POST /api/plugins/tools/execute": {
+    "description": "Execute a plugin-declared tool by key. Body supplies the tool key plus arguments. Only enabled plugins' tools are executable. Instance-admin.",
+    "usage": "List keys via GET /api/plugins/tools first; side effects depend on the tool."
+  },
+  "POST /api/plugins/{pluginId}/actions/{key}": {
+    "description": "UI-facing entry to invoke a plugin's registered action by key (URL-keyed bridge). Body supplies args. Instance-admin. Side effects depend on the action."
+  },
+  "POST /api/plugins/{pluginId}/bridge/action": {
+    "description": "Resolve an `action` request the plugin worker initiated (worker-to-host bridge). Runtime-internal; valid for tests/replay. Instance-admin. Side effects depend on the action."
+  },
+  "POST /api/plugins/{pluginId}/bridge/data": {
+    "description": "Resolve a `data` request the plugin worker initiated (worker-to-host bridge). Typically called by the runtime itself; valid REST for tests/replay. Instance-admin."
+  },
+  "POST /api/plugins/{pluginId}/companies/{companyId}/local-folders/{folderKey}/validate": {
+    "description": "Validate a candidate folder path for the mount without persisting. Body carries the candidate path. Company-scoped; instance-admin.",
+    "usage": "Run before PUT to save the folder."
+  },
+  "POST /api/plugins/{pluginId}/config": {
+    "description": "Write a new instance config for the plugin; body is the full config object. Instance-admin.",
+    "usage": "Validate first with POST /api/plugins/{pluginId}/config/test before persisting."
+  },
+  "POST /api/plugins/{pluginId}/config/test": {
+    "description": "Validate a candidate config without persisting it — invokes the plugin's `validateConfig` RPC. Instance-admin. No side effects.",
+    "usage": "Run before POST /api/plugins/{pluginId}/config."
+  },
+  "POST /api/plugins/{pluginId}/data/{key}": {
+    "description": "UI-facing entry to read a plugin's registered data feed by key (URL-keyed bridge). Body supplies request args. Instance-admin."
+  },
+  "POST /api/plugins/{pluginId}/disable": {
+    "description": "Disable the plugin; stops its worker and hides its UI contributions. Instance-admin. Reversible via enable."
+  },
+  "POST /api/plugins/{pluginId}/enable": {
+    "description": "Enable the plugin; starts its worker and surfaces its UI contributions. Instance-admin.",
+    "usage": "Run after install; reversible via the disable endpoint."
+  },
+  "POST /api/plugins/{pluginId}/jobs/{jobId}/trigger": {
+    "description": "Manually trigger a run of the plugin job. Instance-admin. Side effect: enqueues/executes the worker job."
+  },
+  "POST /api/plugins/{pluginId}/upgrade": {
+    "description": "Run the upgrade flow against the plugin's source. Instance-admin. Runtime is alpha; pin plugin and Paperclip versions in lockstep."
+  },
+  "POST /api/plugins/{pluginId}/webhooks/{endpointKey}": {
+    "description": "Inbound webhook delivery routed to the plugin worker's `handleWebhook` for the named endpointKey. Body is the external payload. Instance-admin."
+  },
+  "POST /api/projects/{id}/workspaces": {
+    "description": "Creates a workspace under a project. Body: name, cwd and/or repoUrl (at least one required), repoRef, defaultRef, visibility, runtimeConfig, isPrimary. remote_managed type needs remoteWorkspaceRef or repoUrl. The first workspace becomes primary automatically; isPrimary:true reassigns primary.",
+    "usage": "Use to add workspaces after project creation."
+  },
+  "POST /api/projects/{id}/workspaces/{workspaceId}/runtime-services/{action}": {
+    "description": "Controls runtime services on a project workspace. action must be start|stop|restart. start/restart require the workspace to have a local cwd AND runtime configuration. Sets workspace desiredState to running (start/restart) or stopped (stop). Returns the updated workspace plus an operation record.",
+    "usage": "Ensure the workspace has cwd + runtimeConfig before start/restart, else it fails."
+  },
+  "POST /api/routine-triggers/public/{publicId}/fire": {
+    "description": "External entry point to fire a webhook trigger by its publicId. Requires the trigger be enabled and the routine active. Auth depends on signingMode: bearer (Authorization: Bearer), hmac_sha256 (X-Paperclip-Signature/X-Hub-Signature-256), github_hmac (those + X-Paperclip-Timestamp), none. Timestamped HMAC enforces the trigger's replay window. Body carries an arbitrary payload.",
+    "usage": "Called by external systems (e.g. Stripe), not the dashboard. publicId must map to a webhook trigger."
+  },
+  "POST /api/routine-triggers/{id}/rotate-secret": {
+    "description": "Rotate a webhook trigger's secret. Webhook triggers only. Generates a new secret, invalidates the previous one immediately, keeps the same public URL, and returns fresh webhookUrl + webhookSecret in the response.",
+    "usage": "Use after secret exposure; the public fire URL is unchanged so external callers only need the new secret."
+  },
+  "POST /api/routines/{id}/run": {
+    "description": "Manually fire a routine; returns 202 Accepted. Optional body: source (default manual, also api), triggerId (must belong to routine and be enabled), payload, variables, projectId/assigneeAgentId overrides, idempotencyKey, executionWorkspace* bindings. Obeys concurrency policy: with a live execution issue the run may be coalesced or skipped rather than creating new work.",
+    "usage": "idempotencyKey dedupes repeats with the same source/trigger. Check resulting run via GET /api/routines/{id}/runs."
+  },
+  "POST /api/routines/{id}/triggers": {
+    "description": "Add a trigger. kind: schedule | webhook | api. schedule needs cronExpression + timezone (server-validated; requires resolvable required variables). webhook returns webhookUrl + webhookSecret ONCE; signingMode bearer (default) | hmac_sha256 | github_hmac | none; replayWindowSec 30-86400 (default 300, HMAC only). api mints no public URL.",
+    "usage": "A routine may have multiple triggers. Capture webhook secret material here; it is not shown again except on rotate."
+  },
+  "POST /api/secrets/{id}/rotate": {
+    "description": "Rotates a secret: body value (required new plaintext), optional externalRef (kept if omitted). Creates a new immutable version and advances latestVersion; id is unchanged. Refs with version 'latest' auto-pick the new value; numeric-pinned refs stay. Board-only.",
+    "usage": "Preferred way to change a credential while keeping the same secret identity."
+  },
+  "PUT /api/agents/{id}/instructions-bundle/file": {
+    "description": "Creates or updates a file in the agent's instructions bundle. Requires manage access to the target agent's instructions."
+  },
+  "PUT /api/companies/{companyId}/resource-memberships/me/agents/{agentId}": {
+    "description": "Agent equivalent of the project membership route: sets whether the current board user keeps an agent in their sidebar. Body: state enum (required) = \"joined\" or \"left\". Agent must belong to company else 404. Returns {resourceType,resourceId,state,updatedAt}. Board auth only (agents 403); self-service only. Re-setting same state is a no-op success.",
+    "usage": "Idempotent. A real change writes a resource_membership.joined/left activity-log entry; defaults to joined when no row exists."
+  },
+  "PUT /api/companies/{companyId}/resource-memberships/me/projects/{projectId}": {
+    "description": "Sets whether the current board user keeps a project in their sidebar. Body: state enum (required) = \"joined\" or \"left\". Project must belong to company else 404. Returns {resourceType,resourceId,state,updatedAt}. Board auth only (agents 403); self-service only. Re-setting the same state is a no-op success.",
+    "usage": "Idempotent. A real state change writes a resource_membership.joined/left activity-log entry; leaving then re-joining restores the default visible state."
+  },
+  "PUT /api/issues/{id}/documents/{key}": {
+    "description": "Create a document or append a revision. Body: body (markdown, up to 512 KiB), optional title, format (markdown), changeSummary, baseRevisionId. Omit baseRevisionId only when creating; updates require the current latest baseRevisionId else 409 with the current revision id. Locked docs: users get 409, agents are redirected to a derived key (redirectedFromLockedDocument)."
+  },
+  "PUT /api/plugins/{pluginId}/companies/{companyId}/local-folders/{folderKey}": {
+    "description": "Persist a folder configuration for the mount; body is the folder config. Company-scoped; instance-admin. Idempotent upsert keyed by folderKey."
+  }
+}

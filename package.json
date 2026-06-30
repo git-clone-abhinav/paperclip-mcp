@@ -1,0 +1,48 @@
+{
+  "name": "paperclip-mcp",
+  "version": "0.1.0",
+  "description": "Model Context Protocol server exposing the Paperclip control-plane REST API as MCP tools.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "paperclip-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "spec",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "gen:spec": "tsx scripts/gen-openapi.ts",
+    "check:coverage": "tsx scripts/check-coverage.ts",
+    "sync": "bash scripts/sync.sh",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "paperclip",
+    "openapi",
+    "ai-agents"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}

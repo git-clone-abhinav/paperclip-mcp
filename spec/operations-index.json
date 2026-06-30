@@ -1,0 +1,4232 @@
+[
+  {
+    "key": "GET /api/health",
+    "method": "get",
+    "path": "/api/health",
+    "summary": "Health check",
+    "tags": [
+      "health"
+    ],
+    "actor": "public"
+  },
+  {
+    "key": "GET /api/openapi.json",
+    "method": "get",
+    "path": "/api/openapi.json",
+    "summary": "Get the generated OpenAPI document",
+    "tags": [
+      "health"
+    ],
+    "actor": "public"
+  },
+  {
+    "key": "GET /api/companies",
+    "method": "get",
+    "path": "/api/companies",
+    "summary": "List companies",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/companies",
+    "method": "post",
+    "path": "/api/companies",
+    "summary": "Create a company",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/companies/stats",
+    "method": "get",
+    "path": "/api/companies/stats",
+    "summary": "Company stats",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/companies/{companyId}",
+    "method": "get",
+    "path": "/api/companies/{companyId}",
+    "summary": "Get a company",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/companies/{companyId}",
+    "method": "patch",
+    "path": "/api/companies/{companyId}",
+    "summary": "Update a company",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/companies/{companyId}",
+    "method": "delete",
+    "path": "/api/companies/{companyId}",
+    "summary": "Delete a company",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/artifacts",
+    "method": "get",
+    "path": "/api/companies/{companyId}/artifacts",
+    "summary": "List company artifacts",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/companies/{companyId}/branding",
+    "method": "patch",
+    "path": "/api/companies/{companyId}/branding",
+    "summary": "Update company branding",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/archive",
+    "method": "post",
+    "path": "/api/companies/{companyId}/archive",
+    "summary": "Archive a company",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/feedback-traces",
+    "method": "get",
+    "path": "/api/companies/{companyId}/feedback-traces",
+    "summary": "List company feedback traces",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/exports",
+    "method": "post",
+    "path": "/api/companies/{companyId}/exports",
+    "summary": "Export company data",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/exports/preview",
+    "method": "post",
+    "path": "/api/companies/{companyId}/exports/preview",
+    "summary": "Preview company export",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/imports/preview",
+    "method": "post",
+    "path": "/api/companies/{companyId}/imports/preview",
+    "summary": "Preview company import",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/imports/apply",
+    "method": "post",
+    "path": "/api/companies/{companyId}/imports/apply",
+    "summary": "Apply company import",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/teams/catalog",
+    "method": "get",
+    "path": "/api/teams/catalog",
+    "summary": "List catalog teams",
+    "tags": [
+      "teams"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/teams/catalog/{catalogId}/files",
+    "method": "get",
+    "path": "/api/teams/catalog/{catalogId}/files",
+    "summary": "Get catalog team file",
+    "tags": [
+      "teams"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/teams/catalog/{catalogId}",
+    "method": "get",
+    "path": "/api/teams/catalog/{catalogId}",
+    "summary": "Get catalog team",
+    "tags": [
+      "teams"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/teams/catalog/installed",
+    "method": "get",
+    "path": "/api/companies/{companyId}/teams/catalog/installed",
+    "summary": "List installed catalog teams",
+    "tags": [
+      "teams"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/teams/catalog/{catalogId}/preview",
+    "method": "post",
+    "path": "/api/companies/{companyId}/teams/catalog/{catalogId}/preview",
+    "summary": "Preview catalog team install",
+    "tags": [
+      "teams"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/teams/catalog/{catalogId}/install",
+    "method": "post",
+    "path": "/api/companies/{companyId}/teams/catalog/{catalogId}/install",
+    "summary": "Install catalog team",
+    "tags": [
+      "teams"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/agents",
+    "method": "get",
+    "path": "/api/companies/{companyId}/agents",
+    "summary": "List agents in a company",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/agents",
+    "method": "post",
+    "path": "/api/companies/{companyId}/agents",
+    "summary": "Create an agent",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/agent-hires",
+    "method": "post",
+    "path": "/api/companies/{companyId}/agent-hires",
+    "summary": "Hire an agent",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/agent-configurations",
+    "method": "get",
+    "path": "/api/companies/{companyId}/agent-configurations",
+    "summary": "List agent configurations for a company",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/org",
+    "method": "get",
+    "path": "/api/companies/{companyId}/org",
+    "summary": "Get org chart data",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/agents/me",
+    "method": "get",
+    "path": "/api/agents/me",
+    "summary": "Get the current agent",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/agents/me/inbox-lite",
+    "method": "get",
+    "path": "/api/agents/me/inbox-lite",
+    "summary": "Get current agent inbox (lite)",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/agents/me/inbox/mine",
+    "method": "get",
+    "path": "/api/agents/me/inbox/mine",
+    "summary": "Get current agent assigned inbox items",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/agents/{id}",
+    "method": "get",
+    "path": "/api/agents/{id}",
+    "summary": "Get an agent",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/agents/{id}",
+    "method": "patch",
+    "path": "/api/agents/{id}",
+    "summary": "Update an agent",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/agents/{id}",
+    "method": "delete",
+    "path": "/api/agents/{id}",
+    "summary": "Delete an agent",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/agents/{id}/permissions",
+    "method": "patch",
+    "path": "/api/agents/{id}/permissions",
+    "summary": "Update agent permissions",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/agents/{id}/instructions-path",
+    "method": "patch",
+    "path": "/api/agents/{id}/instructions-path",
+    "summary": "Update agent instructions path",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/agents/{id}/instructions-bundle",
+    "method": "get",
+    "path": "/api/agents/{id}/instructions-bundle",
+    "summary": "Get agent instructions bundle",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/agents/{id}/instructions-bundle",
+    "method": "patch",
+    "path": "/api/agents/{id}/instructions-bundle",
+    "summary": "Update agent instructions bundle",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/agents/{id}/instructions-bundle/file",
+    "method": "get",
+    "path": "/api/agents/{id}/instructions-bundle/file",
+    "summary": "Get agent instructions file",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PUT /api/agents/{id}/instructions-bundle/file",
+    "method": "put",
+    "path": "/api/agents/{id}/instructions-bundle/file",
+    "summary": "Upsert agent instructions file",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/agents/{id}/instructions-bundle/file",
+    "method": "delete",
+    "path": "/api/agents/{id}/instructions-bundle/file",
+    "summary": "Delete agent instructions file",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/agents/{id}/configuration",
+    "method": "get",
+    "path": "/api/agents/{id}/configuration",
+    "summary": "Get agent configuration",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/agents/{id}/config-revisions",
+    "method": "get",
+    "path": "/api/agents/{id}/config-revisions",
+    "summary": "List agent config revisions",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/agents/{id}/config-revisions/{revisionId}",
+    "method": "get",
+    "path": "/api/agents/{id}/config-revisions/{revisionId}",
+    "summary": "Get an agent config revision",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/agents/{id}/config-revisions/{revisionId}/rollback",
+    "method": "post",
+    "path": "/api/agents/{id}/config-revisions/{revisionId}/rollback",
+    "summary": "Roll back to a config revision",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/agents/{id}/runtime-state",
+    "method": "get",
+    "path": "/api/agents/{id}/runtime-state",
+    "summary": "Get agent runtime state",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/agents/{id}/runtime-state/reset-session",
+    "method": "post",
+    "path": "/api/agents/{id}/runtime-state/reset-session",
+    "summary": "Reset agent session",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/agents/{id}/task-sessions",
+    "method": "get",
+    "path": "/api/agents/{id}/task-sessions",
+    "summary": "List agent task sessions",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/agents/{id}/skills",
+    "method": "get",
+    "path": "/api/agents/{id}/skills",
+    "summary": "List agent skills",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/agents/{id}/skills/sync",
+    "method": "post",
+    "path": "/api/agents/{id}/skills/sync",
+    "summary": "Sync desired skills onto an agent configuration",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/agents/{id}/keys",
+    "method": "get",
+    "path": "/api/agents/{id}/keys",
+    "summary": "List agent API keys",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/agents/{id}/keys",
+    "method": "post",
+    "path": "/api/agents/{id}/keys",
+    "summary": "Create an agent API key",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/agents/{id}/keys/{keyId}",
+    "method": "delete",
+    "path": "/api/agents/{id}/keys/{keyId}",
+    "summary": "Delete an agent API key",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/agents/{id}/wakeup",
+    "method": "post",
+    "path": "/api/agents/{id}/wakeup",
+    "summary": "Wake up an agent",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/agents/{id}/pause",
+    "method": "post",
+    "path": "/api/agents/{id}/pause",
+    "summary": "Pause an agent",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/agents/{id}/resume",
+    "method": "post",
+    "path": "/api/agents/{id}/resume",
+    "summary": "Resume an agent",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/agents/{id}/clear-error",
+    "method": "post",
+    "path": "/api/agents/{id}/clear-error",
+    "summary": "Clear an agent error",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/agents/{id}/terminate",
+    "method": "post",
+    "path": "/api/agents/{id}/terminate",
+    "summary": "Terminate an agent",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/instance/scheduler-heartbeats",
+    "method": "get",
+    "path": "/api/instance/scheduler-heartbeats",
+    "summary": "List scheduler heartbeats",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/adapters/{type}/models",
+    "method": "get",
+    "path": "/api/companies/{companyId}/adapters/{type}/models",
+    "summary": "List models for an adapter type",
+    "tags": [
+      "adapters"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/adapters/{type}/detect-model",
+    "method": "get",
+    "path": "/api/companies/{companyId}/adapters/{type}/detect-model",
+    "summary": "Detect active model for an adapter",
+    "tags": [
+      "adapters"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/adapters/{type}/test-environment",
+    "method": "post",
+    "path": "/api/companies/{companyId}/adapters/{type}/test-environment",
+    "summary": "Validate adapter environment access for a company",
+    "tags": [
+      "adapters"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/issues",
+    "method": "get",
+    "path": "/api/companies/{companyId}/issues",
+    "summary": "List issues in a company",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/issues",
+    "method": "post",
+    "path": "/api/companies/{companyId}/issues",
+    "summary": "Create an issue",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}",
+    "method": "get",
+    "path": "/api/issues/{id}",
+    "summary": "Get an issue",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/issues/{id}",
+    "method": "patch",
+    "path": "/api/issues/{id}",
+    "summary": "Update an issue",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/issues/{id}",
+    "method": "delete",
+    "path": "/api/issues/{id}",
+    "summary": "Delete an issue",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/heartbeat-context",
+    "method": "get",
+    "path": "/api/issues/{id}/heartbeat-context",
+    "summary": "Get issue heartbeat context",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/watchdog",
+    "method": "get",
+    "path": "/api/issues/{id}/watchdog",
+    "summary": "Get active issue watchdog",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PUT /api/issues/{id}/watchdog",
+    "method": "put",
+    "path": "/api/issues/{id}/watchdog",
+    "summary": "Create or update an issue watchdog",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/issues/{id}/watchdog",
+    "method": "delete",
+    "path": "/api/issues/{id}/watchdog",
+    "summary": "Disable an issue watchdog",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/work-products",
+    "method": "get",
+    "path": "/api/issues/{id}/work-products",
+    "summary": "List issue work products",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/work-products",
+    "method": "post",
+    "path": "/api/issues/{id}/work-products",
+    "summary": "Create an issue work product",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/work-products/{id}",
+    "method": "patch",
+    "path": "/api/work-products/{id}",
+    "summary": "Update a work product",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/work-products/{id}",
+    "method": "delete",
+    "path": "/api/work-products/{id}",
+    "summary": "Delete a work product",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/documents",
+    "method": "get",
+    "path": "/api/issues/{id}/documents",
+    "summary": "List issue documents",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/documents/{key}",
+    "method": "get",
+    "path": "/api/issues/{id}/documents/{key}",
+    "summary": "Get an issue document",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PUT /api/issues/{id}/documents/{key}",
+    "method": "put",
+    "path": "/api/issues/{id}/documents/{key}",
+    "summary": "Upsert an issue document",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/issues/{id}/documents/{key}",
+    "method": "delete",
+    "path": "/api/issues/{id}/documents/{key}",
+    "summary": "Delete an issue document",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/documents/{key}/revisions",
+    "method": "get",
+    "path": "/api/issues/{id}/documents/{key}/revisions",
+    "summary": "List issue document revisions",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/documents/{key}/revisions/{revisionId}/restore",
+    "method": "post",
+    "path": "/api/issues/{id}/documents/{key}/revisions/{revisionId}/restore",
+    "summary": "Restore a document revision",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/comments",
+    "method": "get",
+    "path": "/api/issues/{id}/comments",
+    "summary": "List issue comments",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/comments",
+    "method": "post",
+    "path": "/api/issues/{id}/comments",
+    "summary": "Add a comment to an issue",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/issues/{id}/comments/{commentId}",
+    "method": "delete",
+    "path": "/api/issues/{id}/comments/{commentId}",
+    "summary": "Delete an issue comment",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/comments/{commentId}",
+    "method": "get",
+    "path": "/api/issues/{id}/comments/{commentId}",
+    "summary": "Get a single issue comment",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/approvals",
+    "method": "get",
+    "path": "/api/issues/{id}/approvals",
+    "summary": "List issue approvals",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/approvals",
+    "method": "post",
+    "path": "/api/issues/{id}/approvals",
+    "summary": "Link an approval to an issue",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/issues/{id}/approvals/{approvalId}",
+    "method": "delete",
+    "path": "/api/issues/{id}/approvals/{approvalId}",
+    "summary": "Unlink an approval from an issue",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/checkout",
+    "method": "post",
+    "path": "/api/issues/{id}/checkout",
+    "summary": "Check out an issue",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/release",
+    "method": "post",
+    "path": "/api/issues/{id}/release",
+    "summary": "Release an issue",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/read",
+    "method": "post",
+    "path": "/api/issues/{id}/read",
+    "summary": "Mark an issue as read",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/issues/{id}/read",
+    "method": "delete",
+    "path": "/api/issues/{id}/read",
+    "summary": "Mark an issue as unread",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/inbox-archive",
+    "method": "post",
+    "path": "/api/issues/{id}/inbox-archive",
+    "summary": "Archive issue from inbox",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/issues/{id}/inbox-archive",
+    "method": "delete",
+    "path": "/api/issues/{id}/inbox-archive",
+    "summary": "Un-archive issue from inbox",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/feedback-votes",
+    "method": "get",
+    "path": "/api/issues/{id}/feedback-votes",
+    "summary": "List issue feedback votes",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/feedback-votes",
+    "method": "post",
+    "path": "/api/issues/{id}/feedback-votes",
+    "summary": "Upsert a feedback vote",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/feedback-traces",
+    "method": "get",
+    "path": "/api/issues/{id}/feedback-traces",
+    "summary": "List issue feedback traces",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/feedback-traces/{traceId}",
+    "method": "get",
+    "path": "/api/feedback-traces/{traceId}",
+    "summary": "Get a feedback trace",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/feedback-traces/{traceId}/bundle",
+    "method": "get",
+    "path": "/api/feedback-traces/{traceId}/bundle",
+    "summary": "Get a feedback trace bundle",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{issueId}/file-resources/list",
+    "method": "get",
+    "path": "/api/issues/{issueId}/file-resources/list",
+    "summary": "List workspace files for an issue",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/issues/{issueId}/file-resources/resolve",
+    "method": "get",
+    "path": "/api/issues/{issueId}/file-resources/resolve",
+    "summary": "Resolve an issue workspace file",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/issues/{issueId}/file-resources/content",
+    "method": "get",
+    "path": "/api/issues/{issueId}/file-resources/content",
+    "summary": "Read issue workspace file content",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/issues/{id}/attachments",
+    "method": "get",
+    "path": "/api/issues/{id}/attachments",
+    "summary": "List issue attachments",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/labels",
+    "method": "get",
+    "path": "/api/companies/{companyId}/labels",
+    "summary": "List labels in a company",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/labels",
+    "method": "post",
+    "path": "/api/companies/{companyId}/labels",
+    "summary": "Create a label",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/labels/{labelId}",
+    "method": "delete",
+    "path": "/api/labels/{labelId}",
+    "summary": "Delete a label",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/projects",
+    "method": "get",
+    "path": "/api/companies/{companyId}/projects",
+    "summary": "List projects in a company",
+    "tags": [
+      "projects"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/projects",
+    "method": "post",
+    "path": "/api/companies/{companyId}/projects",
+    "summary": "Create a project",
+    "tags": [
+      "projects"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/projects/{id}",
+    "method": "get",
+    "path": "/api/projects/{id}",
+    "summary": "Get a project",
+    "tags": [
+      "projects"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/projects/{id}",
+    "method": "patch",
+    "path": "/api/projects/{id}",
+    "summary": "Update a project",
+    "tags": [
+      "projects"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/projects/{id}",
+    "method": "delete",
+    "path": "/api/projects/{id}",
+    "summary": "Delete a project",
+    "tags": [
+      "projects"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/projects/{id}/workspaces",
+    "method": "get",
+    "path": "/api/projects/{id}/workspaces",
+    "summary": "List project workspaces",
+    "tags": [
+      "projects"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/projects/{id}/workspaces",
+    "method": "post",
+    "path": "/api/projects/{id}/workspaces",
+    "summary": "Create a project workspace",
+    "tags": [
+      "projects"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/projects/{id}/workspaces/{workspaceId}",
+    "method": "patch",
+    "path": "/api/projects/{id}/workspaces/{workspaceId}",
+    "summary": "Update a project workspace",
+    "tags": [
+      "projects"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/projects/{id}/workspaces/{workspaceId}",
+    "method": "delete",
+    "path": "/api/projects/{id}/workspaces/{workspaceId}",
+    "summary": "Delete a project workspace",
+    "tags": [
+      "projects"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/routines",
+    "method": "get",
+    "path": "/api/companies/{companyId}/routines",
+    "summary": "List routines in a company",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/routines",
+    "method": "post",
+    "path": "/api/companies/{companyId}/routines",
+    "summary": "Create a routine",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/routines/{id}",
+    "method": "get",
+    "path": "/api/routines/{id}",
+    "summary": "Get a routine",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/routines/{id}",
+    "method": "patch",
+    "path": "/api/routines/{id}",
+    "summary": "Update a routine",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/routines/{id}/runs",
+    "method": "get",
+    "path": "/api/routines/{id}/runs",
+    "summary": "List runs for a routine",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/routines/{id}/run",
+    "method": "post",
+    "path": "/api/routines/{id}/run",
+    "summary": "Manually run a routine",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/routines/{id}/triggers",
+    "method": "post",
+    "path": "/api/routines/{id}/triggers",
+    "summary": "Create a routine trigger",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/routine-triggers/{id}",
+    "method": "patch",
+    "path": "/api/routine-triggers/{id}",
+    "summary": "Update a routine trigger",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/routine-triggers/{id}",
+    "method": "delete",
+    "path": "/api/routine-triggers/{id}",
+    "summary": "Delete a routine trigger",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/routine-triggers/{id}/rotate-secret",
+    "method": "post",
+    "path": "/api/routine-triggers/{id}/rotate-secret",
+    "summary": "Rotate a routine trigger secret",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/routine-triggers/public/{publicId}/fire",
+    "method": "post",
+    "path": "/api/routine-triggers/public/{publicId}/fire",
+    "summary": "Fire a public routine trigger",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/goals",
+    "method": "get",
+    "path": "/api/companies/{companyId}/goals",
+    "summary": "List goals in a company",
+    "tags": [
+      "goals"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/goals",
+    "method": "post",
+    "path": "/api/companies/{companyId}/goals",
+    "summary": "Create a goal",
+    "tags": [
+      "goals"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/goals/{id}",
+    "method": "get",
+    "path": "/api/goals/{id}",
+    "summary": "Get a goal",
+    "tags": [
+      "goals"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/goals/{id}",
+    "method": "patch",
+    "path": "/api/goals/{id}",
+    "summary": "Update a goal",
+    "tags": [
+      "goals"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/goals/{id}",
+    "method": "delete",
+    "path": "/api/goals/{id}",
+    "summary": "Delete a goal",
+    "tags": [
+      "goals"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/secret-providers",
+    "method": "get",
+    "path": "/api/companies/{companyId}/secret-providers",
+    "summary": "List secret providers",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/secrets",
+    "method": "get",
+    "path": "/api/companies/{companyId}/secrets",
+    "summary": "List secrets in a company",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/secrets",
+    "method": "post",
+    "path": "/api/companies/{companyId}/secrets",
+    "summary": "Create a secret",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/secrets/{id}",
+    "method": "patch",
+    "path": "/api/secrets/{id}",
+    "summary": "Update a secret",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/secrets/{id}",
+    "method": "delete",
+    "path": "/api/secrets/{id}",
+    "summary": "Delete a secret",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/secrets/{id}/rotate",
+    "method": "post",
+    "path": "/api/secrets/{id}/rotate",
+    "summary": "Rotate a secret",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/approvals",
+    "method": "get",
+    "path": "/api/companies/{companyId}/approvals",
+    "summary": "List approvals in a company",
+    "tags": [
+      "approvals"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/approvals",
+    "method": "post",
+    "path": "/api/companies/{companyId}/approvals",
+    "summary": "Create an approval",
+    "tags": [
+      "approvals"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/approvals/{id}",
+    "method": "get",
+    "path": "/api/approvals/{id}",
+    "summary": "Get an approval",
+    "tags": [
+      "approvals"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/approvals/{id}/issues",
+    "method": "get",
+    "path": "/api/approvals/{id}/issues",
+    "summary": "List issues linked to an approval",
+    "tags": [
+      "approvals"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/approvals/{id}/approve",
+    "method": "post",
+    "path": "/api/approvals/{id}/approve",
+    "summary": "Approve an approval",
+    "tags": [
+      "approvals"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/approvals/{id}/reject",
+    "method": "post",
+    "path": "/api/approvals/{id}/reject",
+    "summary": "Reject an approval",
+    "tags": [
+      "approvals"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/approvals/{id}/request-revision",
+    "method": "post",
+    "path": "/api/approvals/{id}/request-revision",
+    "summary": "Request revision on an approval",
+    "tags": [
+      "approvals"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/approvals/{id}/resubmit",
+    "method": "post",
+    "path": "/api/approvals/{id}/resubmit",
+    "summary": "Resubmit an approval",
+    "tags": [
+      "approvals"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/approvals/{id}/comments",
+    "method": "get",
+    "path": "/api/approvals/{id}/comments",
+    "summary": "List approval comments",
+    "tags": [
+      "approvals"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/approvals/{id}/comments",
+    "method": "post",
+    "path": "/api/approvals/{id}/comments",
+    "summary": "Add a comment to an approval",
+    "tags": [
+      "approvals"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/costs/summary",
+    "method": "get",
+    "path": "/api/companies/{companyId}/costs/summary",
+    "summary": "Cost report: summary",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/costs/by-agent",
+    "method": "get",
+    "path": "/api/companies/{companyId}/costs/by-agent",
+    "summary": "Cost report: by-agent",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/costs/by-agent-model",
+    "method": "get",
+    "path": "/api/companies/{companyId}/costs/by-agent-model",
+    "summary": "Cost report: by-agent-model",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/costs/by-provider",
+    "method": "get",
+    "path": "/api/companies/{companyId}/costs/by-provider",
+    "summary": "Cost report: by-provider",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/costs/by-biller",
+    "method": "get",
+    "path": "/api/companies/{companyId}/costs/by-biller",
+    "summary": "Cost report: by-biller",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/costs/by-project",
+    "method": "get",
+    "path": "/api/companies/{companyId}/costs/by-project",
+    "summary": "Cost report: by-project",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/costs/finance-summary",
+    "method": "get",
+    "path": "/api/companies/{companyId}/costs/finance-summary",
+    "summary": "Cost report: finance-summary",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/costs/finance-by-biller",
+    "method": "get",
+    "path": "/api/companies/{companyId}/costs/finance-by-biller",
+    "summary": "Cost report: finance-by-biller",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/costs/finance-by-kind",
+    "method": "get",
+    "path": "/api/companies/{companyId}/costs/finance-by-kind",
+    "summary": "Cost report: finance-by-kind",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/costs/finance-events",
+    "method": "get",
+    "path": "/api/companies/{companyId}/costs/finance-events",
+    "summary": "Cost report: finance-events",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/costs/window-spend",
+    "method": "get",
+    "path": "/api/companies/{companyId}/costs/window-spend",
+    "summary": "Cost report: window-spend",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/costs/quota-windows",
+    "method": "get",
+    "path": "/api/companies/{companyId}/costs/quota-windows",
+    "summary": "Cost report: quota-windows",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/cost-events",
+    "method": "post",
+    "path": "/api/companies/{companyId}/cost-events",
+    "summary": "Record a cost event",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/finance-events",
+    "method": "post",
+    "path": "/api/companies/{companyId}/finance-events",
+    "summary": "Record a finance event",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/budgets/policies",
+    "method": "post",
+    "path": "/api/companies/{companyId}/budgets/policies",
+    "summary": "Create or update a budget policy",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/budget-incidents/{incidentId}/resolve",
+    "method": "post",
+    "path": "/api/companies/{companyId}/budget-incidents/{incidentId}/resolve",
+    "summary": "Resolve a budget incident",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/budgets/overview",
+    "method": "get",
+    "path": "/api/companies/{companyId}/budgets/overview",
+    "summary": "Get budget overview",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/companies/{companyId}/budgets",
+    "method": "patch",
+    "path": "/api/companies/{companyId}/budgets",
+    "summary": "Update company budget",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/agents/{agentId}/budgets",
+    "method": "patch",
+    "path": "/api/agents/{agentId}/budgets",
+    "summary": "Update agent budget",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/activity",
+    "method": "get",
+    "path": "/api/companies/{companyId}/activity",
+    "summary": "List company activity",
+    "tags": [
+      "activity"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/activity",
+    "method": "post",
+    "path": "/api/companies/{companyId}/activity",
+    "summary": "Create an activity entry",
+    "tags": [
+      "activity"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/activity",
+    "method": "get",
+    "path": "/api/issues/{id}/activity",
+    "summary": "List activity for an issue",
+    "tags": [
+      "activity"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/runs",
+    "method": "get",
+    "path": "/api/issues/{id}/runs",
+    "summary": "List runs for an issue",
+    "tags": [
+      "activity"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/heartbeat-runs/{runId}/issues",
+    "method": "get",
+    "path": "/api/heartbeat-runs/{runId}/issues",
+    "summary": "List issues for a heartbeat run",
+    "tags": [
+      "activity"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/dashboard",
+    "method": "get",
+    "path": "/api/companies/{companyId}/dashboard",
+    "summary": "Get dashboard data",
+    "tags": [
+      "dashboard"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/sidebar-badges",
+    "method": "get",
+    "path": "/api/companies/{companyId}/sidebar-badges",
+    "summary": "Get sidebar badge counts",
+    "tags": [
+      "sidebar"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/sidebar-preferences/me",
+    "method": "get",
+    "path": "/api/sidebar-preferences/me",
+    "summary": "Get current user sidebar preferences",
+    "tags": [
+      "sidebar"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PUT /api/sidebar-preferences/me",
+    "method": "put",
+    "path": "/api/sidebar-preferences/me",
+    "summary": "Update current user sidebar preferences",
+    "tags": [
+      "sidebar"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/sidebar-preferences/me",
+    "method": "get",
+    "path": "/api/companies/{companyId}/sidebar-preferences/me",
+    "summary": "Get sidebar preferences for company",
+    "tags": [
+      "sidebar"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PUT /api/companies/{companyId}/sidebar-preferences/me",
+    "method": "put",
+    "path": "/api/companies/{companyId}/sidebar-preferences/me",
+    "summary": "Update sidebar preferences for company",
+    "tags": [
+      "sidebar"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/inbox-dismissals",
+    "method": "get",
+    "path": "/api/companies/{companyId}/inbox-dismissals",
+    "summary": "List inbox dismissals",
+    "tags": [
+      "inbox"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/inbox-dismissals",
+    "method": "post",
+    "path": "/api/companies/{companyId}/inbox-dismissals",
+    "summary": "Create an inbox dismissal",
+    "tags": [
+      "inbox"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/instance/settings",
+    "method": "get",
+    "path": "/api/instance/settings",
+    "summary": "Get instance settings",
+    "tags": [
+      "instance"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "PATCH /api/instance/settings",
+    "method": "patch",
+    "path": "/api/instance/settings",
+    "summary": "Update instance settings",
+    "tags": [
+      "instance"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/instance/settings/general",
+    "method": "get",
+    "path": "/api/instance/settings/general",
+    "summary": "Get general instance settings",
+    "tags": [
+      "instance"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "PATCH /api/instance/settings/general",
+    "method": "patch",
+    "path": "/api/instance/settings/general",
+    "summary": "Update general instance settings",
+    "tags": [
+      "instance"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/instance/settings/experimental",
+    "method": "get",
+    "path": "/api/instance/settings/experimental",
+    "summary": "Get experimental instance settings",
+    "tags": [
+      "instance"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "PATCH /api/instance/settings/experimental",
+    "method": "patch",
+    "path": "/api/instance/settings/experimental",
+    "summary": "Update experimental instance settings",
+    "tags": [
+      "instance"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/board/chat/stream",
+    "method": "post",
+    "path": "/api/board/chat/stream",
+    "summary": "Stream a board-level chat response (requires enableConferenceRoomChat)",
+    "tags": [
+      "instance"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/invites",
+    "method": "get",
+    "path": "/api/companies/{companyId}/invites",
+    "summary": "List company invites",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/invites",
+    "method": "post",
+    "path": "/api/companies/{companyId}/invites",
+    "summary": "Create a company invite",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/join-requests",
+    "method": "get",
+    "path": "/api/companies/{companyId}/join-requests",
+    "summary": "List company join requests",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/join-requests/{requestId}/approve",
+    "method": "post",
+    "path": "/api/companies/{companyId}/join-requests/{requestId}/approve",
+    "summary": "Approve a company join request",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/join-requests/{requestId}/reject",
+    "method": "post",
+    "path": "/api/companies/{companyId}/join-requests/{requestId}/reject",
+    "summary": "Reject a company join request",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/invites/{inviteId}/revoke",
+    "method": "post",
+    "path": "/api/invites/{inviteId}/revoke",
+    "summary": "Revoke an invite",
+    "tags": [
+      "access"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/invites/{token}",
+    "method": "get",
+    "path": "/api/invites/{token}",
+    "summary": "Get an invite by token",
+    "tags": [
+      "access"
+    ],
+    "actor": "public"
+  },
+  {
+    "key": "POST /api/invites/{token}/accept",
+    "method": "post",
+    "path": "/api/invites/{token}/accept",
+    "summary": "Accept an invite and create or replay a join request",
+    "tags": [
+      "access"
+    ],
+    "actor": "public"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/members",
+    "method": "get",
+    "path": "/api/companies/{companyId}/members",
+    "summary": "List company members",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "PATCH /api/companies/{companyId}/members/{memberId}",
+    "method": "patch",
+    "path": "/api/companies/{companyId}/members/{memberId}",
+    "summary": "Update a company member status or role",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "PATCH /api/companies/{companyId}/members/{memberId}/role-and-grants",
+    "method": "patch",
+    "path": "/api/companies/{companyId}/members/{memberId}/role-and-grants",
+    "summary": "Update a company member role and explicit grants",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/members/{memberId}/archive",
+    "method": "post",
+    "path": "/api/companies/{companyId}/members/{memberId}/archive",
+    "summary": "Archive a company member",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "PATCH /api/companies/{companyId}/members/{memberId}/permissions",
+    "method": "patch",
+    "path": "/api/companies/{companyId}/members/{memberId}/permissions",
+    "summary": "Update explicit company member permissions",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/user-directory",
+    "method": "get",
+    "path": "/api/companies/{companyId}/user-directory",
+    "summary": "Get company user directory",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/cli-auth/me",
+    "method": "get",
+    "path": "/api/cli-auth/me",
+    "summary": "Get current CLI auth session",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/openclaw/invite-prompt",
+    "method": "post",
+    "path": "/api/companies/{companyId}/openclaw/invite-prompt",
+    "summary": "Create an OpenClaw invite prompt bundle",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/cli-auth/challenges",
+    "method": "post",
+    "path": "/api/cli-auth/challenges",
+    "summary": "Create a CLI auth challenge",
+    "tags": [
+      "access"
+    ],
+    "actor": "public"
+  },
+  {
+    "key": "POST /api/cli-auth/challenges/{id}/approve",
+    "method": "post",
+    "path": "/api/cli-auth/challenges/{id}/approve",
+    "summary": "Approve a CLI auth challenge",
+    "tags": [
+      "access"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/cli-auth/challenges/{id}/cancel",
+    "method": "post",
+    "path": "/api/cli-auth/challenges/{id}/cancel",
+    "summary": "Cancel a CLI auth challenge",
+    "tags": [
+      "access"
+    ],
+    "actor": "public"
+  },
+  {
+    "key": "POST /api/cli-auth/revoke-current",
+    "method": "post",
+    "path": "/api/cli-auth/revoke-current",
+    "summary": "Revoke current CLI auth session",
+    "tags": [
+      "access"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/skills/available",
+    "method": "get",
+    "path": "/api/skills/available",
+    "summary": "List available skills",
+    "tags": [
+      "access"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/skills/index",
+    "method": "get",
+    "path": "/api/skills/index",
+    "summary": "Get skills index",
+    "tags": [
+      "access"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/skills/{skillName}",
+    "method": "get",
+    "path": "/api/skills/{skillName}",
+    "summary": "Get a skill by name",
+    "tags": [
+      "access"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/join-requests/{requestId}/claim-api-key",
+    "method": "post",
+    "path": "/api/join-requests/{requestId}/claim-api-key",
+    "summary": "Claim the initial API key for an approved agent join request",
+    "tags": [
+      "access"
+    ],
+    "actor": "public"
+  },
+  {
+    "key": "GET /api/admin/users",
+    "method": "get",
+    "path": "/api/admin/users",
+    "summary": "List all users (admin)",
+    "tags": [
+      "admin"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/auth/get-session",
+    "method": "get",
+    "path": "/api/auth/get-session",
+    "summary": "Get current session",
+    "tags": [
+      "auth"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/auth/profile",
+    "method": "get",
+    "path": "/api/auth/profile",
+    "summary": "Get current user profile",
+    "tags": [
+      "auth"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "PATCH /api/auth/profile",
+    "method": "patch",
+    "path": "/api/auth/profile",
+    "summary": "Update current user profile",
+    "tags": [
+      "auth"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/users/{userSlug}/profile",
+    "method": "get",
+    "path": "/api/companies/{companyId}/users/{userSlug}/profile",
+    "summary": "Get a user profile within a company",
+    "tags": [
+      "auth"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/heartbeat-runs",
+    "method": "get",
+    "path": "/api/companies/{companyId}/heartbeat-runs",
+    "summary": "List heartbeat runs for a company",
+    "tags": [
+      "runs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/live-runs",
+    "method": "get",
+    "path": "/api/companies/{companyId}/live-runs",
+    "summary": "List live runs for a company",
+    "tags": [
+      "runs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{issueId}/live-runs",
+    "method": "get",
+    "path": "/api/issues/{issueId}/live-runs",
+    "summary": "List live runs for an issue",
+    "tags": [
+      "runs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{issueId}/active-run",
+    "method": "get",
+    "path": "/api/issues/{issueId}/active-run",
+    "summary": "Get active run for an issue",
+    "tags": [
+      "runs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/heartbeat-runs/{runId}",
+    "method": "get",
+    "path": "/api/heartbeat-runs/{runId}",
+    "summary": "Get a heartbeat run",
+    "tags": [
+      "runs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/heartbeat-runs/{runId}/cancel",
+    "method": "post",
+    "path": "/api/heartbeat-runs/{runId}/cancel",
+    "summary": "Cancel a heartbeat run",
+    "tags": [
+      "runs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/heartbeat-runs/{runId}/watchdog-decisions",
+    "method": "post",
+    "path": "/api/heartbeat-runs/{runId}/watchdog-decisions",
+    "summary": "Submit watchdog decisions for a run",
+    "tags": [
+      "runs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/heartbeat-runs/{runId}/events",
+    "method": "get",
+    "path": "/api/heartbeat-runs/{runId}/events",
+    "summary": "Get events for a heartbeat run",
+    "tags": [
+      "runs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/heartbeat-runs/{runId}/log",
+    "method": "get",
+    "path": "/api/heartbeat-runs/{runId}/log",
+    "summary": "Get log for a heartbeat run",
+    "tags": [
+      "runs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/heartbeat-runs/{runId}/workspace-operations",
+    "method": "get",
+    "path": "/api/heartbeat-runs/{runId}/workspace-operations",
+    "summary": "List workspace operations for a run",
+    "tags": [
+      "runs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/workspace-operations/{operationId}/log",
+    "method": "get",
+    "path": "/api/workspace-operations/{operationId}/log",
+    "summary": "Get log for a workspace operation",
+    "tags": [
+      "runs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/agents/{id}/approve",
+    "method": "post",
+    "path": "/api/agents/{id}/approve",
+    "summary": "Approve a pending agent action",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/agents/{id}/heartbeat/invoke",
+    "method": "post",
+    "path": "/api/agents/{id}/heartbeat/invoke",
+    "summary": "Invoke agent heartbeat",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/agents/{id}/claude-login",
+    "method": "post",
+    "path": "/api/agents/{id}/claude-login",
+    "summary": "Trigger Claude login for agent",
+    "tags": [
+      "agents"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/interactions",
+    "method": "get",
+    "path": "/api/issues/{id}/interactions",
+    "summary": "List issue thread interactions",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/interactions",
+    "method": "post",
+    "path": "/api/issues/{id}/interactions",
+    "summary": "Create an issue thread interaction",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/interactions/{interactionId}/accept",
+    "method": "post",
+    "path": "/api/issues/{id}/interactions/{interactionId}/accept",
+    "summary": "Accept an issue thread interaction",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/issues/{id}/interactions/{interactionId}/reject",
+    "method": "post",
+    "path": "/api/issues/{id}/interactions/{interactionId}/reject",
+    "summary": "Reject an issue thread interaction",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/issues/{id}/interactions/{interactionId}/respond",
+    "method": "post",
+    "path": "/api/issues/{id}/interactions/{interactionId}/respond",
+    "summary": "Answer questions on an issue thread interaction",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/issues/{id}/children",
+    "method": "post",
+    "path": "/api/issues/{id}/children",
+    "summary": "Create child issues",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/admin/force-release",
+    "method": "post",
+    "path": "/api/issues/{id}/admin/force-release",
+    "summary": "Force-release an issue (admin)",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/tree-control/state",
+    "method": "get",
+    "path": "/api/issues/{id}/tree-control/state",
+    "summary": "Get issue tree control state",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/tree-control/preview",
+    "method": "post",
+    "path": "/api/issues/{id}/tree-control/preview",
+    "summary": "Preview issue tree control changes",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/tree-holds",
+    "method": "get",
+    "path": "/api/issues/{id}/tree-holds",
+    "summary": "List issue tree holds",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/tree-holds",
+    "method": "post",
+    "path": "/api/issues/{id}/tree-holds",
+    "summary": "Create an issue tree hold",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/tree-holds/{holdId}",
+    "method": "get",
+    "path": "/api/issues/{id}/tree-holds/{holdId}",
+    "summary": "Get an issue tree hold",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/tree-holds/{holdId}/release",
+    "method": "post",
+    "path": "/api/issues/{id}/tree-holds/{holdId}/release",
+    "summary": "Release an issue tree hold",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/issues/{issueId}/attachments",
+    "method": "post",
+    "path": "/api/companies/{companyId}/issues/{issueId}/attachments",
+    "summary": "Upload an attachment to an issue",
+    "tags": [
+      "assets"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/attachments/{attachmentId}/content",
+    "method": "get",
+    "path": "/api/attachments/{attachmentId}/content",
+    "summary": "Download attachment content",
+    "tags": [
+      "assets"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/attachments/{attachmentId}",
+    "method": "delete",
+    "path": "/api/attachments/{attachmentId}",
+    "summary": "Delete an attachment",
+    "tags": [
+      "assets"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/assets/images",
+    "method": "post",
+    "path": "/api/companies/{companyId}/assets/images",
+    "summary": "Upload an image asset",
+    "tags": [
+      "assets"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/logo",
+    "method": "post",
+    "path": "/api/companies/{companyId}/logo",
+    "summary": "Upload company logo",
+    "tags": [
+      "assets"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/assets/{assetId}/content",
+    "method": "get",
+    "path": "/api/assets/{assetId}/content",
+    "summary": "Download asset content",
+    "tags": [
+      "assets"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/skills",
+    "method": "get",
+    "path": "/api/companies/{companyId}/skills",
+    "summary": "List skills for a company",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/skills",
+    "method": "post",
+    "path": "/api/companies/{companyId}/skills",
+    "summary": "Create a company skill",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/skills/{skillId}",
+    "method": "get",
+    "path": "/api/companies/{companyId}/skills/{skillId}",
+    "summary": "Get a company skill",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/companies/{companyId}/skills/{skillId}",
+    "method": "delete",
+    "path": "/api/companies/{companyId}/skills/{skillId}",
+    "summary": "Delete a company skill",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/companies/{companyId}/skills/{skillId}",
+    "method": "patch",
+    "path": "/api/companies/{companyId}/skills/{skillId}",
+    "summary": "Update a company skill",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/skills/{skillId}/update-status",
+    "method": "get",
+    "path": "/api/companies/{companyId}/skills/{skillId}/update-status",
+    "summary": "Get skill update status",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/skills/{skillId}/files",
+    "method": "get",
+    "path": "/api/companies/{companyId}/skills/{skillId}/files",
+    "summary": "List skill files",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/companies/{companyId}/skills/{skillId}/files",
+    "method": "patch",
+    "path": "/api/companies/{companyId}/skills/{skillId}/files",
+    "summary": "Update a skill file",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/skills/import",
+    "method": "post",
+    "path": "/api/companies/{companyId}/skills/import",
+    "summary": "Import a skill",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/skills/scan-projects",
+    "method": "post",
+    "path": "/api/companies/{companyId}/skills/scan-projects",
+    "summary": "Scan project for skills",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/skills/{skillId}/install-update",
+    "method": "post",
+    "path": "/api/companies/{companyId}/skills/{skillId}/install-update",
+    "summary": "Install a skill update",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/execution-workspaces",
+    "method": "get",
+    "path": "/api/companies/{companyId}/execution-workspaces",
+    "summary": "List execution workspaces for a company",
+    "tags": [
+      "execution-workspaces"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/workspace-overview",
+    "method": "get",
+    "path": "/api/companies/{companyId}/workspace-overview",
+    "summary": "List bounded execution workspace overview rows for a company",
+    "tags": [
+      "execution-workspaces"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/execution-workspaces/{id}",
+    "method": "get",
+    "path": "/api/execution-workspaces/{id}",
+    "summary": "Get an execution workspace",
+    "tags": [
+      "execution-workspaces"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/execution-workspaces/{id}",
+    "method": "patch",
+    "path": "/api/execution-workspaces/{id}",
+    "summary": "Update an execution workspace",
+    "tags": [
+      "execution-workspaces"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/execution-workspaces/{id}/close-readiness",
+    "method": "get",
+    "path": "/api/execution-workspaces/{id}/close-readiness",
+    "summary": "Check close-readiness of a workspace",
+    "tags": [
+      "execution-workspaces"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/execution-workspaces/{id}/workspace-operations",
+    "method": "get",
+    "path": "/api/execution-workspaces/{id}/workspace-operations",
+    "summary": "List workspace operations",
+    "tags": [
+      "execution-workspaces"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/execution-workspaces/{id}/runtime-services/{action}",
+    "method": "post",
+    "path": "/api/execution-workspaces/{id}/runtime-services/{action}",
+    "summary": "Control a runtime service in a workspace",
+    "tags": [
+      "execution-workspaces"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/execution-workspaces/{id}/runtime-commands/{action}",
+    "method": "post",
+    "path": "/api/execution-workspaces/{id}/runtime-commands/{action}",
+    "summary": "Run a runtime command in a workspace",
+    "tags": [
+      "execution-workspaces"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/environments",
+    "method": "get",
+    "path": "/api/companies/{companyId}/environments",
+    "summary": "List environments for a company",
+    "tags": [
+      "environments"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/environments",
+    "method": "post",
+    "path": "/api/companies/{companyId}/environments",
+    "summary": "Create an environment",
+    "tags": [
+      "environments"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/environments/capabilities",
+    "method": "get",
+    "path": "/api/companies/{companyId}/environments/capabilities",
+    "summary": "Get environment capabilities",
+    "tags": [
+      "environments"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/environments/{id}",
+    "method": "get",
+    "path": "/api/environments/{id}",
+    "summary": "Get an environment",
+    "tags": [
+      "environments"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/environments/{id}",
+    "method": "patch",
+    "path": "/api/environments/{id}",
+    "summary": "Update an environment",
+    "tags": [
+      "environments"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/environments/{id}",
+    "method": "delete",
+    "path": "/api/environments/{id}",
+    "summary": "Delete an environment",
+    "tags": [
+      "environments"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/environments/{id}/leases",
+    "method": "get",
+    "path": "/api/environments/{id}/leases",
+    "summary": "List leases for an environment",
+    "tags": [
+      "environments"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/environment-leases/{leaseId}",
+    "method": "get",
+    "path": "/api/environment-leases/{leaseId}",
+    "summary": "Get an environment lease",
+    "tags": [
+      "environments"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/environments/{id}/probe",
+    "method": "post",
+    "path": "/api/environments/{id}/probe",
+    "summary": "Probe an environment",
+    "tags": [
+      "environments"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/environments/probe-config",
+    "method": "post",
+    "path": "/api/companies/{companyId}/environments/probe-config",
+    "summary": "Probe environment config",
+    "tags": [
+      "environments"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/adapters",
+    "method": "get",
+    "path": "/api/adapters",
+    "summary": "List all adapters",
+    "tags": [
+      "adapters"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/adapters/install",
+    "method": "post",
+    "path": "/api/adapters/install",
+    "summary": "Install an adapter",
+    "tags": [
+      "adapters"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/adapters/{type}",
+    "method": "patch",
+    "path": "/api/adapters/{type}",
+    "summary": "Enable or disable an adapter",
+    "tags": [
+      "adapters"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/adapters/{type}",
+    "method": "delete",
+    "path": "/api/adapters/{type}",
+    "summary": "Delete an adapter",
+    "tags": [
+      "adapters"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/adapters/{type}",
+    "method": "get",
+    "path": "/api/adapters/{type}",
+    "summary": "Get adapter registration details",
+    "tags": [
+      "adapters"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/adapters/{type}/override",
+    "method": "patch",
+    "path": "/api/adapters/{type}/override",
+    "summary": "Pause or resume an adapter's override of a builtin",
+    "tags": [
+      "adapters"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/adapters/{type}/reload",
+    "method": "post",
+    "path": "/api/adapters/{type}/reload",
+    "summary": "Reload an adapter",
+    "tags": [
+      "adapters"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/adapters/{type}/reinstall",
+    "method": "post",
+    "path": "/api/adapters/{type}/reinstall",
+    "summary": "Reinstall an adapter",
+    "tags": [
+      "adapters"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/adapters/{type}/config-schema",
+    "method": "get",
+    "path": "/api/adapters/{type}/config-schema",
+    "summary": "Get adapter config schema",
+    "tags": [
+      "adapters"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/plugins",
+    "method": "get",
+    "path": "/api/plugins",
+    "summary": "List installed plugins",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/plugins/examples",
+    "method": "get",
+    "path": "/api/plugins/examples",
+    "summary": "List example plugins",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/plugins/ui-contributions",
+    "method": "get",
+    "path": "/api/plugins/ui-contributions",
+    "summary": "List plugin UI contributions",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/plugins/tools",
+    "method": "get",
+    "path": "/api/plugins/tools",
+    "summary": "List plugin tools",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/plugins/tools/execute",
+    "method": "post",
+    "path": "/api/plugins/tools/execute",
+    "summary": "Execute a plugin tool",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/plugins/install",
+    "method": "post",
+    "path": "/api/plugins/install",
+    "summary": "Install a plugin",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/plugins/{pluginId}",
+    "method": "get",
+    "path": "/api/plugins/{pluginId}",
+    "summary": "Get a plugin",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "DELETE /api/plugins/{pluginId}",
+    "method": "delete",
+    "path": "/api/plugins/{pluginId}",
+    "summary": "Delete a plugin",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/plugins/{pluginId}/enable",
+    "method": "post",
+    "path": "/api/plugins/{pluginId}/enable",
+    "summary": "Enable a plugin",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/plugins/{pluginId}/disable",
+    "method": "post",
+    "path": "/api/plugins/{pluginId}/disable",
+    "summary": "Disable a plugin",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/plugins/{pluginId}/health",
+    "method": "get",
+    "path": "/api/plugins/{pluginId}/health",
+    "summary": "Get plugin health",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/plugins/{pluginId}/logs",
+    "method": "get",
+    "path": "/api/plugins/{pluginId}/logs",
+    "summary": "Get plugin logs",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/plugins/{pluginId}/upgrade",
+    "method": "post",
+    "path": "/api/plugins/{pluginId}/upgrade",
+    "summary": "Upgrade a plugin",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/plugins/{pluginId}/config",
+    "method": "get",
+    "path": "/api/plugins/{pluginId}/config",
+    "summary": "Get plugin config",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/plugins/{pluginId}/config",
+    "method": "post",
+    "path": "/api/plugins/{pluginId}/config",
+    "summary": "Set plugin config",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/plugins/{pluginId}/config/test",
+    "method": "post",
+    "path": "/api/plugins/{pluginId}/config/test",
+    "summary": "Test plugin config",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/plugins/{pluginId}/jobs",
+    "method": "get",
+    "path": "/api/plugins/{pluginId}/jobs",
+    "summary": "List plugin jobs",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/plugins/{pluginId}/jobs/{jobId}/runs",
+    "method": "get",
+    "path": "/api/plugins/{pluginId}/jobs/{jobId}/runs",
+    "summary": "List runs for a plugin job",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/plugins/{pluginId}/jobs/{jobId}/trigger",
+    "method": "post",
+    "path": "/api/plugins/{pluginId}/jobs/{jobId}/trigger",
+    "summary": "Trigger a plugin job",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/plugins/{pluginId}/webhooks/{endpointKey}",
+    "method": "post",
+    "path": "/api/plugins/{pluginId}/webhooks/{endpointKey}",
+    "summary": "Deliver an external webhook payload to a plugin",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/plugins/{pluginId}/dashboard",
+    "method": "get",
+    "path": "/api/plugins/{pluginId}/dashboard",
+    "summary": "Get plugin dashboard data",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/plugins/{pluginId}/bridge/data",
+    "method": "post",
+    "path": "/api/plugins/{pluginId}/bridge/data",
+    "summary": "Send data via plugin bridge",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/plugins/{pluginId}/bridge/action",
+    "method": "post",
+    "path": "/api/plugins/{pluginId}/bridge/action",
+    "summary": "Send action via plugin bridge",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/plugins/{pluginId}/data/{key}",
+    "method": "post",
+    "path": "/api/plugins/{pluginId}/data/{key}",
+    "summary": "Get plugin data by key (URL-keyed bridge)",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/plugins/{pluginId}/actions/{key}",
+    "method": "post",
+    "path": "/api/plugins/{pluginId}/actions/{key}",
+    "summary": "Invoke a plugin action (URL-keyed bridge)",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/instance/database-backups",
+    "method": "post",
+    "path": "/api/instance/database-backups",
+    "summary": "Trigger a database backup",
+    "tags": [
+      "instance"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/llms/agent-configuration.txt",
+    "method": "get",
+    "path": "/api/llms/agent-configuration.txt",
+    "summary": "Get agent configuration as plain text (for LLM context)",
+    "tags": [
+      "llms"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/llms/agent-configuration/{adapterType}.txt",
+    "method": "get",
+    "path": "/api/llms/agent-configuration/{adapterType}.txt",
+    "summary": "Get agent configuration for a specific adapter type",
+    "tags": [
+      "llms"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/llms/agent-icons.txt",
+    "method": "get",
+    "path": "/api/llms/agent-icons.txt",
+    "summary": "Get agent icon names as plain text",
+    "tags": [
+      "llms"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues",
+    "method": "get",
+    "path": "/api/issues",
+    "summary": "Legacy — returns error directing to /api/companies/{companyId}/issues",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/external-objects",
+    "method": "get",
+    "path": "/api/issues/{id}/external-objects",
+    "summary": "List external objects mentioned by an issue",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/external-object-summary",
+    "method": "get",
+    "path": "/api/issues/{id}/external-object-summary",
+    "summary": "Get external object status summary for an issue",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/issues/external-object-summaries",
+    "method": "post",
+    "path": "/api/companies/{companyId}/issues/external-object-summaries",
+    "summary": "Get external object status summaries for issues",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/external-objects/refresh",
+    "method": "post",
+    "path": "/api/issues/{id}/external-objects/refresh",
+    "summary": "Refresh external objects mentioned by an issue",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/projects/{id}/external-object-summary",
+    "method": "get",
+    "path": "/api/projects/{id}/external-object-summary",
+    "summary": "Get external object status summary for a project",
+    "tags": [
+      "projects"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/org.svg",
+    "method": "get",
+    "path": "/api/companies/{companyId}/org.svg",
+    "summary": "Get org chart as SVG",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/org.png",
+    "method": "get",
+    "path": "/api/companies/{companyId}/org.png",
+    "summary": "Get org chart as PNG",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/issues",
+    "method": "get",
+    "path": "/api/companies/issues",
+    "summary": "Legacy — returns error directing to correct issues path",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/export",
+    "method": "post",
+    "path": "/api/companies/{companyId}/export",
+    "summary": "Export a company (legacy singular form)",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/import/preview",
+    "method": "post",
+    "path": "/api/companies/import/preview",
+    "summary": "Preview a company import (legacy route)",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/import",
+    "method": "post",
+    "path": "/api/companies/import",
+    "summary": "Apply a company import (legacy route)",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/board-claim/{token}",
+    "method": "get",
+    "path": "/api/board-claim/{token}",
+    "summary": "Get board claim details by token",
+    "tags": [
+      "access"
+    ],
+    "actor": "public"
+  },
+  {
+    "key": "POST /api/board-claim/{token}/claim",
+    "method": "post",
+    "path": "/api/board-claim/{token}/claim",
+    "summary": "Claim a board token",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/cli-auth/challenges/{id}",
+    "method": "get",
+    "path": "/api/cli-auth/challenges/{id}",
+    "summary": "Get a CLI auth challenge",
+    "tags": [
+      "access"
+    ],
+    "actor": "public"
+  },
+  {
+    "key": "GET /api/invites/{token}/logo",
+    "method": "get",
+    "path": "/api/invites/{token}/logo",
+    "summary": "Get company logo for an invite",
+    "tags": [
+      "access"
+    ],
+    "actor": "public"
+  },
+  {
+    "key": "GET /api/invites/{token}/onboarding",
+    "method": "get",
+    "path": "/api/invites/{token}/onboarding",
+    "summary": "Get onboarding data for an invite",
+    "tags": [
+      "access"
+    ],
+    "actor": "public"
+  },
+  {
+    "key": "GET /api/invites/{token}/onboarding.txt",
+    "method": "get",
+    "path": "/api/invites/{token}/onboarding.txt",
+    "summary": "Get onboarding instructions as plain text",
+    "tags": [
+      "access"
+    ],
+    "actor": "public"
+  },
+  {
+    "key": "GET /api/invites/{token}/skills/index",
+    "method": "get",
+    "path": "/api/invites/{token}/skills/index",
+    "summary": "Get skills index for an invite",
+    "tags": [
+      "access"
+    ],
+    "actor": "public"
+  },
+  {
+    "key": "GET /api/invites/{token}/skills/{skillName}",
+    "method": "get",
+    "path": "/api/invites/{token}/skills/{skillName}",
+    "summary": "Get a skill by name for an invite",
+    "tags": [
+      "access"
+    ],
+    "actor": "public"
+  },
+  {
+    "key": "GET /api/invites/{token}/test-resolution",
+    "method": "get",
+    "path": "/api/invites/{token}/test-resolution",
+    "summary": "Test invite token resolution",
+    "tags": [
+      "access"
+    ],
+    "actor": "public"
+  },
+  {
+    "key": "GET /api/admin/users/{userId}/company-access",
+    "method": "get",
+    "path": "/api/admin/users/{userId}/company-access",
+    "summary": "Get company access for a user (admin)",
+    "tags": [
+      "admin"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "PUT /api/admin/users/{userId}/company-access",
+    "method": "put",
+    "path": "/api/admin/users/{userId}/company-access",
+    "summary": "Set company access for a user (admin)",
+    "tags": [
+      "admin"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/admin/users/{userId}/promote-instance-admin",
+    "method": "post",
+    "path": "/api/admin/users/{userId}/promote-instance-admin",
+    "summary": "Promote a user to instance admin",
+    "tags": [
+      "admin"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/admin/users/{userId}/demote-instance-admin",
+    "method": "post",
+    "path": "/api/admin/users/{userId}/demote-instance-admin",
+    "summary": "Demote a user from instance admin",
+    "tags": [
+      "admin"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/projects/{id}/workspaces/{workspaceId}/runtime-services/{action}",
+    "method": "post",
+    "path": "/api/projects/{id}/workspaces/{workspaceId}/runtime-services/{action}",
+    "summary": "Control a runtime service in a project workspace",
+    "tags": [
+      "projects"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/projects/{id}/workspaces/{workspaceId}/runtime-commands/{action}",
+    "method": "post",
+    "path": "/api/projects/{id}/workspaces/{workspaceId}/runtime-commands/{action}",
+    "summary": "Run a runtime command in a project workspace",
+    "tags": [
+      "projects"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/plugins/{pluginId}/bridge/stream/{channel}",
+    "method": "get",
+    "path": "/api/plugins/{pluginId}/bridge/stream/{channel}",
+    "summary": "Subscribe to a plugin bridge SSE stream",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/_plugins/{pluginId}/ui/{filePath}",
+    "method": "get",
+    "path": "/api/_plugins/{pluginId}/ui/{filePath}",
+    "summary": "Serve plugin UI static file",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/adapters/{type}/ui-parser.js",
+    "method": "get",
+    "path": "/api/adapters/{type}/ui-parser.js",
+    "summary": "Get adapter UI parser script",
+    "tags": [
+      "adapters"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/adapters/{type}/model-profiles",
+    "method": "get",
+    "path": "/api/companies/{companyId}/adapters/{type}/model-profiles",
+    "summary": "List adapter model profiles for a company",
+    "tags": [
+      "adapters"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/health/dev-server/restart",
+    "method": "post",
+    "path": "/api/health/dev-server/restart",
+    "summary": "Request a managed dev-server restart",
+    "tags": [
+      "health"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/bootstrap/claim",
+    "method": "post",
+    "path": "/api/bootstrap/claim",
+    "summary": "Claim first instance admin from a browser session",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/board-api-keys",
+    "method": "get",
+    "path": "/api/board-api-keys",
+    "summary": "List board API keys",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/board-api-keys",
+    "method": "post",
+    "path": "/api/board-api-keys",
+    "summary": "Create a named board API key",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "DELETE /api/board-api-keys/{keyId}",
+    "method": "delete",
+    "path": "/api/board-api-keys/{keyId}",
+    "summary": "Revoke a board API key",
+    "tags": [
+      "access"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/companies/import/jobs/{jobId}",
+    "method": "get",
+    "path": "/api/companies/import/jobs/{jobId}",
+    "summary": "Get company import job status",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/search",
+    "method": "get",
+    "path": "/api/companies/{companyId}/search",
+    "summary": "Search company data",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/issues/count",
+    "method": "get",
+    "path": "/api/companies/{companyId}/issues/count",
+    "summary": "Count issues in a company",
+    "tags": [
+      "companies"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/cost-summary",
+    "method": "get",
+    "path": "/api/issues/{id}/cost-summary",
+    "summary": "Get issue cost summary",
+    "tags": [
+      "costs"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/resource-memberships/me",
+    "method": "get",
+    "path": "/api/companies/{companyId}/resource-memberships/me",
+    "summary": "List current user's resource memberships",
+    "tags": [
+      "resource-memberships"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "PUT /api/companies/{companyId}/resource-memberships/me/agents/{agentId}",
+    "method": "put",
+    "path": "/api/companies/{companyId}/resource-memberships/me/agents/{agentId}",
+    "summary": "Join or leave an agent resource",
+    "tags": [
+      "resource-memberships"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "PUT /api/companies/{companyId}/resource-memberships/me/projects/{projectId}",
+    "method": "put",
+    "path": "/api/companies/{companyId}/resource-memberships/me/projects/{projectId}",
+    "summary": "Join or leave a project resource",
+    "tags": [
+      "resource-memberships"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/cloud-upstreams",
+    "method": "get",
+    "path": "/api/cloud-upstreams",
+    "summary": "List cloud upstream connections",
+    "tags": [
+      "cloud-upstreams"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/cloud-upstreams/connect/start",
+    "method": "post",
+    "path": "/api/cloud-upstreams/connect/start",
+    "summary": "Start a cloud upstream connection",
+    "tags": [
+      "cloud-upstreams"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/cloud-upstreams/connect/finish",
+    "method": "post",
+    "path": "/api/cloud-upstreams/connect/finish",
+    "summary": "Finish a cloud upstream connection",
+    "tags": [
+      "cloud-upstreams"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/cloud-upstreams/{connectionId}/push-runs/preview",
+    "method": "post",
+    "path": "/api/cloud-upstreams/{connectionId}/push-runs/preview",
+    "summary": "Preview a cloud upstream push run",
+    "tags": [
+      "cloud-upstreams"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/cloud-upstreams/{connectionId}/push-runs",
+    "method": "post",
+    "path": "/api/cloud-upstreams/{connectionId}/push-runs",
+    "summary": "Create a cloud upstream push run",
+    "tags": [
+      "cloud-upstreams"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/cloud-upstreams/{connectionId}/push-runs/{runId}",
+    "method": "get",
+    "path": "/api/cloud-upstreams/{connectionId}/push-runs/{runId}",
+    "summary": "Get a cloud upstream push run",
+    "tags": [
+      "cloud-upstreams"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/cloud-upstreams/{connectionId}/push-runs/{runId}/cancel",
+    "method": "post",
+    "path": "/api/cloud-upstreams/{connectionId}/push-runs/{runId}/cancel",
+    "summary": "Cancel a cloud upstream push run",
+    "tags": [
+      "cloud-upstreams"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/cloud-upstreams/{connectionId}/push-runs/{runId}/activation",
+    "method": "post",
+    "path": "/api/cloud-upstreams/{connectionId}/push-runs/{runId}/activation",
+    "summary": "Activate cloud upstream push run entities",
+    "tags": [
+      "cloud-upstreams"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/secret-providers/health",
+    "method": "get",
+    "path": "/api/companies/{companyId}/secret-providers/health",
+    "summary": "Check configured secret providers",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/secret-provider-configs",
+    "method": "get",
+    "path": "/api/companies/{companyId}/secret-provider-configs",
+    "summary": "List secret provider configurations",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/secret-provider-configs",
+    "method": "post",
+    "path": "/api/companies/{companyId}/secret-provider-configs",
+    "summary": "Create a secret provider configuration",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/secret-provider-configs/{id}",
+    "method": "get",
+    "path": "/api/secret-provider-configs/{id}",
+    "summary": "Get a secret provider configuration",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "DELETE /api/secret-provider-configs/{id}",
+    "method": "delete",
+    "path": "/api/secret-provider-configs/{id}",
+    "summary": "Delete a secret provider configuration",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "PATCH /api/secret-provider-configs/{id}",
+    "method": "patch",
+    "path": "/api/secret-provider-configs/{id}",
+    "summary": "Update a secret provider configuration",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/secret-provider-configs/{id}/default",
+    "method": "post",
+    "path": "/api/secret-provider-configs/{id}/default",
+    "summary": "Set the default secret provider configuration",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/secret-provider-configs/{id}/health",
+    "method": "post",
+    "path": "/api/secret-provider-configs/{id}/health",
+    "summary": "Check a secret provider configuration",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/secrets/{id}/usage",
+    "method": "get",
+    "path": "/api/secrets/{id}/usage",
+    "summary": "Get secret usage",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/secrets/{id}/access-events",
+    "method": "get",
+    "path": "/api/secrets/{id}/access-events",
+    "summary": "List secret access events",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/secret-provider-configs/discovery/preview",
+    "method": "post",
+    "path": "/api/companies/{companyId}/secret-provider-configs/discovery/preview",
+    "summary": "Preview secret provider discovery",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/secrets/remote-import/preview",
+    "method": "post",
+    "path": "/api/companies/{companyId}/secrets/remote-import/preview",
+    "summary": "Preview remote secret import",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/secrets/remote-import",
+    "method": "post",
+    "path": "/api/companies/{companyId}/secrets/remote-import",
+    "summary": "Import remote secrets",
+    "tags": [
+      "secrets"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/skills/catalog",
+    "method": "get",
+    "path": "/api/skills/catalog",
+    "summary": "List catalog skills",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/skills/catalog/{catalogId}",
+    "method": "get",
+    "path": "/api/skills/catalog/{catalogId}",
+    "summary": "Get a catalog skill",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/skills/catalog/{catalogId}/files",
+    "method": "get",
+    "path": "/api/skills/catalog/{catalogId}/files",
+    "summary": "List catalog skill files",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/skills/install-catalog",
+    "method": "post",
+    "path": "/api/companies/{companyId}/skills/install-catalog",
+    "summary": "Install a catalog skill",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/skills/categories",
+    "method": "get",
+    "path": "/api/companies/{companyId}/skills/categories",
+    "summary": "List company skill categories",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/skills/{skillId}/audit",
+    "method": "post",
+    "path": "/api/companies/{companyId}/skills/{skillId}/audit",
+    "summary": "Audit a company skill",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/skills/{skillId}/versions",
+    "method": "get",
+    "path": "/api/companies/{companyId}/skills/{skillId}/versions",
+    "summary": "List skill versions",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/skills/{skillId}/versions",
+    "method": "post",
+    "path": "/api/companies/{companyId}/skills/{skillId}/versions",
+    "summary": "Create a skill version",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/skills/{skillId}/versions/{versionId}",
+    "method": "get",
+    "path": "/api/companies/{companyId}/skills/{skillId}/versions/{versionId}",
+    "summary": "Get a skill version",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/skills/{skillId}/star",
+    "method": "post",
+    "path": "/api/companies/{companyId}/skills/{skillId}/star",
+    "summary": "Star a company skill",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/companies/{companyId}/skills/{skillId}/star",
+    "method": "delete",
+    "path": "/api/companies/{companyId}/skills/{skillId}/star",
+    "summary": "Unstar a company skill",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/skills/{skillId}/fork",
+    "method": "post",
+    "path": "/api/companies/{companyId}/skills/{skillId}/fork",
+    "summary": "Fork a company skill",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/companies/{companyId}/skills/{skillId}/comments",
+    "method": "get",
+    "path": "/api/companies/{companyId}/skills/{skillId}/comments",
+    "summary": "List skill comments",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/skills/{skillId}/comments",
+    "method": "post",
+    "path": "/api/companies/{companyId}/skills/{skillId}/comments",
+    "summary": "Create a skill comment",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/companies/{companyId}/skills/{skillId}/comments/{commentId}",
+    "method": "patch",
+    "path": "/api/companies/{companyId}/skills/{skillId}/comments/{commentId}",
+    "summary": "Update a skill comment",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "DELETE /api/companies/{companyId}/skills/{skillId}/comments/{commentId}",
+    "method": "delete",
+    "path": "/api/companies/{companyId}/skills/{skillId}/comments/{commentId}",
+    "summary": "Delete a skill comment",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/companies/{companyId}/skills/{skillId}/reset",
+    "method": "post",
+    "path": "/api/companies/{companyId}/skills/{skillId}/reset",
+    "summary": "Reset a company skill",
+    "tags": [
+      "skills"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/instance/settings/experimental/issue-graph-liveness-auto-recovery/preview",
+    "method": "post",
+    "path": "/api/instance/settings/experimental/issue-graph-liveness-auto-recovery/preview",
+    "summary": "Preview issue graph liveness auto-recovery",
+    "tags": [
+      "instance-settings"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/instance/settings/experimental/issue-graph-liveness-auto-recovery/run",
+    "method": "post",
+    "path": "/api/instance/settings/experimental/issue-graph-liveness-auto-recovery/run",
+    "summary": "Run issue graph liveness auto-recovery",
+    "tags": [
+      "instance-settings"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/issues/{id}/accepted-plan-decompositions",
+    "method": "get",
+    "path": "/api/issues/{id}/accepted-plan-decompositions",
+    "summary": "List accepted plan decompositions",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/accepted-plan-decompositions",
+    "method": "post",
+    "path": "/api/issues/{id}/accepted-plan-decompositions",
+    "summary": "Create accepted plan decomposition child issues",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/documents/{key}/annotations",
+    "method": "get",
+    "path": "/api/issues/{id}/documents/{key}/annotations",
+    "summary": "List document annotation threads",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/documents/{key}/annotations",
+    "method": "post",
+    "path": "/api/issues/{id}/documents/{key}/annotations",
+    "summary": "Create a document annotation thread",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/documents/{key}/annotations/{threadId}",
+    "method": "get",
+    "path": "/api/issues/{id}/documents/{key}/annotations/{threadId}",
+    "summary": "Get a document annotation thread",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/issues/{id}/documents/{key}/annotations/{threadId}",
+    "method": "patch",
+    "path": "/api/issues/{id}/documents/{key}/annotations/{threadId}",
+    "summary": "Update a document annotation thread",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/documents/{key}/lock",
+    "method": "post",
+    "path": "/api/issues/{id}/documents/{key}/lock",
+    "summary": "Lock an issue document",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/documents/{key}/unlock",
+    "method": "post",
+    "path": "/api/issues/{id}/documents/{key}/unlock",
+    "summary": "Unlock an issue document",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/documents/{key}/annotations/{threadId}/comments",
+    "method": "post",
+    "path": "/api/issues/{id}/documents/{key}/annotations/{threadId}/comments",
+    "summary": "Add a document annotation comment",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/low-trust/promotions",
+    "method": "post",
+    "path": "/api/issues/{id}/low-trust/promotions",
+    "summary": "Promote quarantined low-trust output",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/routines/{id}/description/annotations",
+    "method": "get",
+    "path": "/api/routines/{id}/description/annotations",
+    "summary": "List routine description annotation threads",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/routines/{id}/description/annotations",
+    "method": "post",
+    "path": "/api/routines/{id}/description/annotations",
+    "summary": "Create a routine description annotation thread",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/routines/{id}/description/annotations/{threadId}",
+    "method": "get",
+    "path": "/api/routines/{id}/description/annotations/{threadId}",
+    "summary": "Get a routine description annotation thread",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "PATCH /api/routines/{id}/description/annotations/{threadId}",
+    "method": "patch",
+    "path": "/api/routines/{id}/description/annotations/{threadId}",
+    "summary": "Update a routine description annotation thread",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/routines/{id}/description/annotations/{threadId}/comments",
+    "method": "post",
+    "path": "/api/routines/{id}/description/annotations/{threadId}/comments",
+    "summary": "Add a routine description annotation comment",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/issues/{id}/recovery-actions",
+    "method": "get",
+    "path": "/api/issues/{id}/recovery-actions",
+    "summary": "List issue recovery actions",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/recovery-actions/resolve",
+    "method": "post",
+    "path": "/api/issues/{id}/recovery-actions/resolve",
+    "summary": "Resolve an issue recovery action",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/scheduled-retry/retry-now",
+    "method": "post",
+    "path": "/api/issues/{id}/scheduled-retry/retry-now",
+    "summary": "Retry a scheduled issue run now",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/monitor/check-now",
+    "method": "post",
+    "path": "/api/issues/{id}/monitor/check-now",
+    "summary": "Run an issue monitor check now",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/issues/{id}/interactions/{interactionId}/cancel",
+    "method": "post",
+    "path": "/api/issues/{id}/interactions/{interactionId}/cancel",
+    "summary": "Cancel an issue question interaction",
+    "tags": [
+      "issues"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/routines/{id}/revisions",
+    "method": "get",
+    "path": "/api/routines/{id}/revisions",
+    "summary": "List routine revisions",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "POST /api/routines/{id}/revisions/{revisionId}/restore",
+    "method": "post",
+    "path": "/api/routines/{id}/revisions/{revisionId}/restore",
+    "summary": "Restore a routine revision",
+    "tags": [
+      "routines"
+    ],
+    "actor": "board_or_agent"
+  },
+  {
+    "key": "GET /api/plugins/{pluginId}/companies/{companyId}/local-folders",
+    "method": "get",
+    "path": "/api/plugins/{pluginId}/companies/{companyId}/local-folders",
+    "summary": "List plugin local folders",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "GET /api/plugins/{pluginId}/companies/{companyId}/local-folders/{folderKey}/status",
+    "method": "get",
+    "path": "/api/plugins/{pluginId}/companies/{companyId}/local-folders/{folderKey}/status",
+    "summary": "Get plugin local folder status",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "POST /api/plugins/{pluginId}/companies/{companyId}/local-folders/{folderKey}/validate",
+    "method": "post",
+    "path": "/api/plugins/{pluginId}/companies/{companyId}/local-folders/{folderKey}/validate",
+    "summary": "Validate a plugin local folder",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  },
+  {
+    "key": "PUT /api/plugins/{pluginId}/companies/{companyId}/local-folders/{folderKey}",
+    "method": "put",
+    "path": "/api/plugins/{pluginId}/companies/{companyId}/local-folders/{folderKey}",
+    "summary": "Save a plugin local folder",
+    "tags": [
+      "plugins"
+    ],
+    "actor": "board"
+  }
+]
